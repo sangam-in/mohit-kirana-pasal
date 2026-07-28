@@ -9,38 +9,174 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TransactionsRouteImport } from './routes/transactions'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as PosRouteImport } from './routes/pos'
+import { Route as KhataRouteImport } from './routes/khata'
+import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as KhataCustomerIdRouteImport } from './routes/khata.$customerId'
 
+const TransactionsRoute = TransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PosRoute = PosRouteImport.update({
+  id: '/pos',
+  path: '/pos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KhataRoute = KhataRouteImport.update({
+  id: '/khata',
+  path: '/khata',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InventoryRoute = InventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KhataCustomerIdRoute = KhataCustomerIdRouteImport.update({
+  id: '/$customerId',
+  path: '/$customerId',
+  getParentRoute: () => KhataRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/inventory': typeof InventoryRoute
+  '/khata': typeof KhataRouteWithChildren
+  '/pos': typeof PosRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/transactions': typeof TransactionsRoute
+  '/khata/$customerId': typeof KhataCustomerIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/inventory': typeof InventoryRoute
+  '/khata': typeof KhataRouteWithChildren
+  '/pos': typeof PosRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/transactions': typeof TransactionsRoute
+  '/khata/$customerId': typeof KhataCustomerIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/inventory': typeof InventoryRoute
+  '/khata': typeof KhataRouteWithChildren
+  '/pos': typeof PosRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/transactions': typeof TransactionsRoute
+  '/khata/$customerId': typeof KhataCustomerIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/inventory'
+    | '/khata'
+    | '/pos'
+    | '/reports'
+    | '/settings'
+    | '/transactions'
+    | '/khata/$customerId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/inventory'
+    | '/khata'
+    | '/pos'
+    | '/reports'
+    | '/settings'
+    | '/transactions'
+    | '/khata/$customerId'
+  id:
+    | '__root__'
+    | '/'
+    | '/inventory'
+    | '/khata'
+    | '/pos'
+    | '/reports'
+    | '/settings'
+    | '/transactions'
+    | '/khata/$customerId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InventoryRoute: typeof InventoryRoute
+  KhataRoute: typeof KhataRouteWithChildren
+  PosRoute: typeof PosRoute
+  ReportsRoute: typeof ReportsRoute
+  SettingsRoute: typeof SettingsRoute
+  TransactionsRoute: typeof TransactionsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/transactions': {
+      id: '/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof TransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pos': {
+      id: '/pos'
+      path: '/pos'
+      fullPath: '/pos'
+      preLoaderRoute: typeof PosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/khata': {
+      id: '/khata'
+      path: '/khata'
+      fullPath: '/khata'
+      preLoaderRoute: typeof KhataRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inventory': {
+      id: '/inventory'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof InventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +184,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/khata/$customerId': {
+      id: '/khata/$customerId'
+      path: '/$customerId'
+      fullPath: '/khata/$customerId'
+      preLoaderRoute: typeof KhataCustomerIdRouteImport
+      parentRoute: typeof KhataRoute
+    }
   }
 }
 
+interface KhataRouteChildren {
+  KhataCustomerIdRoute: typeof KhataCustomerIdRoute
+}
+
+const KhataRouteChildren: KhataRouteChildren = {
+  KhataCustomerIdRoute: KhataCustomerIdRoute,
+}
+
+const KhataRouteWithChildren = KhataRoute._addFileChildren(KhataRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InventoryRoute: InventoryRoute,
+  KhataRoute: KhataRouteWithChildren,
+  PosRoute: PosRoute,
+  ReportsRoute: ReportsRoute,
+  SettingsRoute: SettingsRoute,
+  TransactionsRoute: TransactionsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
