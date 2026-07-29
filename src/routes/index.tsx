@@ -53,21 +53,22 @@ function Dashboard() {
 
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <div className="hidden md:flex items-center gap-2 rounded-full bg-card border border-border px-4 py-2 shadow-soft w-64">
+          <div className="hidden md:flex items-center gap-2 bg-card border border-border px-4 py-2 shadow-soft w-64 clip-notch">
             <Search className="w-4 h-4 text-muted-foreground" />
             <input
               placeholder="Search products, customers…"
               className="bg-transparent text-sm outline-none flex-1 placeholder:text-muted-foreground"
             />
           </div>
-          <button className="w-10 h-10 rounded-full bg-coral text-white flex items-center justify-center shadow-soft">
-            <span className="text-lg font-bold leading-none -mt-0.5">+</span>
+          <button className="w-10 h-10 rotate-45 bg-coral text-white flex items-center justify-center shadow-soft">
+            <span className="text-lg font-bold leading-none -rotate-45">+</span>
           </button>
-          <button className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center relative shadow-soft">
+          <button className="w-10 h-10 rounded-sm bg-card border border-border flex items-center justify-center relative shadow-soft">
             <Bell className="w-4 h-4" />
             <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-coral text-white text-[10px] font-bold flex items-center justify-center">2</span>
           </button>
-          <div className="w-10 h-10 rounded-full bg-gradient-iridescent border-2 border-card shadow-soft" />
+          <div className="w-10 h-10 bg-gradient-iridescent border-2 border-card shadow-soft shape-hex" />
+
         </div>
       </header>
 
