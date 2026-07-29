@@ -56,7 +56,8 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.5rem;
+
 
   /* Light, near-white background like the reference */
   --background: oklch(0.975 0.003 285);
