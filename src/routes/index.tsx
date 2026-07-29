@@ -281,15 +281,15 @@ function Dashboard() {
           { label: "Outstanding Khata", value: formatNPR(outstanding), sub: `${customers.filter(c=>c.balance>0).length} customers`, icon: BookOpen },
           { label: "Low-Stock Alerts", value: String(lowStock.length), sub: "Restock today", icon: AlertTriangle, tone: "warn" },
         ].map((s) => (
-          <div key={s.label} className="rounded-3xl bg-card border border-border p-4 shadow-soft">
+          <div key={s.label} className="rounded-lg bg-card border border-border p-4 shadow-soft clip-notch">
             <div className="flex items-start justify-between">
               <div className="text-xs text-muted-foreground">{s.label}</div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              <div className={`w-8 h-8 rounded-sm rotate-45 flex items-center justify-center ${
                 s.tone === "coral" ? "bg-coral/15 text-coral" :
                 s.tone === "warn" ? "bg-warning/20 text-warning-foreground" :
                 "bg-muted text-foreground"
               }`}>
-                <s.icon className="w-4 h-4" />
+                <s.icon className="w-4 h-4 -rotate-45" />
               </div>
             </div>
             <div className="mt-2 text-2xl font-display font-bold">{s.value}</div>
@@ -297,6 +297,7 @@ function Dashboard() {
           </div>
         ))}
       </div>
+
 
       {/* Top debtors */}
       <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
