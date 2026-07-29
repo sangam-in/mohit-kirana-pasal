@@ -37,12 +37,12 @@ function Dashboard() {
       {/* Top bar: pill tabs + search + profile */}
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
         <div className="flex items-center gap-2 min-w-0 overflow-x-auto">
-          <div className="flex items-center gap-1 rounded-full bg-card border border-border p-1 shadow-soft shrink-0">
+          <div className="flex items-center gap-1 bg-card border border-border p-1 shadow-soft shrink-0 clip-notch">
             {tabs.map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                className={`px-4 py-2 rounded-sm text-sm font-medium transition ${
                   tab === t ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -50,6 +50,7 @@ function Dashboard() {
               </button>
             ))}
           </div>
+
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <div className="hidden md:flex items-center gap-2 rounded-full bg-card border border-border px-4 py-2 shadow-soft w-64">
