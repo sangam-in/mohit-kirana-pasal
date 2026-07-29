@@ -86,12 +86,13 @@ function Dashboard() {
               </div>
             ))}
           </div>
-          <button className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium shadow-soft hover:opacity-90">
+          <button className="inline-flex items-center gap-2 rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium shadow-soft hover:opacity-90">
             <Plus className="w-4 h-4" /> New Sale
           </button>
-          <button className="inline-flex items-center gap-2 rounded-full bg-card border border-border px-4 py-2 text-sm font-medium shadow-soft">
+          <button className="inline-flex items-center gap-2 rounded-md bg-card border border-border px-4 py-2 text-sm font-medium shadow-soft">
             Aug 2026 <span className="text-muted-foreground">▾</span>
           </button>
+
           <span className="text-sm text-muted-foreground pl-2 border-l border-border ml-1">My Store</span>
         </div>
       </div>
