@@ -214,7 +214,7 @@ function Dashboard() {
         {/* RIGHT column */}
         <section className="lg:col-span-3 space-y-5">
           {/* Iridescent card */}
-          <div className="rounded-3xl p-5 bg-gradient-iridescent shadow-elegant text-white relative overflow-hidden aspect-[1.6/1]">
+          <div className="rounded-lg p-5 bg-gradient-iridescent shadow-elegant text-white relative overflow-hidden aspect-[1.6/1] clip-slant">
             <div className="flex items-start justify-between">
               <span className="text-sm font-medium opacity-90">Cash on hand</span>
               <Wifi className="w-4 h-4 opacity-90" />
@@ -226,15 +226,15 @@ function Dashboard() {
             </div>
           </div>
 
-          <button className="w-full rounded-full bg-card border border-border py-3 text-sm font-medium shadow-soft flex items-center justify-center gap-2 hover:bg-muted transition">
+          <button className="w-full rounded-md bg-card border border-border py-3 text-sm font-medium shadow-soft flex items-center justify-center gap-2 hover:bg-muted transition">
             <Plus className="w-4 h-4" /> Add New Account
           </button>
 
           {/* Quick Khata */}
-          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+          <div className="rounded-lg bg-card border border-border shadow-soft p-5">
             <h3 className="font-display font-semibold">Quick Khata</h3>
             <div className="mt-3 flex items-center gap-2">
-              <button className="w-9 h-9 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
+              <button className="w-9 h-9 rounded-sm bg-muted flex items-center justify-center text-muted-foreground">
                 <Plus className="w-4 h-4" />
               </button>
               <div className="flex -space-x-2">
@@ -248,12 +248,12 @@ function Dashboard() {
           </div>
 
           {/* Last transactions */}
-          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+          <div className="rounded-lg bg-card border border-border shadow-soft p-5">
             <h3 className="font-display font-semibold mb-3">Last Transactions</h3>
             <div className="space-y-3">
               {recentSales.slice(0, 3).map((s) => (
                 <div key={s.id} className="flex items-center gap-3">
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                  <div className={`w-9 h-9 rounded-sm flex items-center justify-center text-[10px] font-bold ${
                     s.method === "cash" ? "bg-success/15 text-success-foreground" :
                     s.method === "qr" ? "bg-accent text-accent-foreground" :
                     "bg-warning/20 text-warning-foreground"
@@ -269,6 +269,7 @@ function Dashboard() {
               ))}
             </div>
           </div>
+
         </section>
       </div>
 
