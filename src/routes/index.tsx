@@ -150,12 +150,12 @@ function Dashboard() {
         {/* MIDDLE column */}
         <section className="lg:col-span-4 space-y-5">
           {/* Monthly budget */}
-          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+          <div className="rounded-lg bg-card border border-border shadow-soft p-5 clip-slant">
             <div className="flex items-center justify-between">
               <h3 className="font-display font-semibold text-lg">Monthly Budget</h3>
               <div className="flex gap-1">
-                <button className="w-7 h-7 rounded-full hover:bg-muted flex items-center justify-center"><MoreHorizontal className="w-4 h-4" /></button>
-                <button className="w-7 h-7 rounded-full hover:bg-muted flex items-center justify-center text-muted-foreground">↗</button>
+                <button className="w-7 h-7 rounded-sm hover:bg-muted flex items-center justify-center"><MoreHorizontal className="w-4 h-4" /></button>
+                <button className="w-7 h-7 rounded-sm hover:bg-muted flex items-center justify-center text-muted-foreground">↗</button>
               </div>
             </div>
             <div className="mt-4 flex items-baseline justify-between">
@@ -168,24 +168,25 @@ function Dashboard() {
                 <div className="text-lg font-display font-bold mt-0.5">{formatNPR(16000)}</div>
               </div>
             </div>
-            <div className="mt-3 h-2 rounded-full bg-muted overflow-hidden">
-              <div className="h-full rounded-full bg-gradient-to-r from-coral via-orange-400 to-purple-400" style={{ width: "60%" }} />
+            <div className="mt-3 h-2 rounded-none bg-muted overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-coral via-orange-400 to-purple-400" style={{ width: "60%" }} />
             </div>
           </div>
 
           {/* Expenses breakdown w/ donut */}
-          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+          <div className="rounded-lg bg-card border border-border shadow-soft p-5">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-display font-semibold text-lg">Expenses</h3>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 Income <span className="text-coral font-semibold">↑</span>
               </div>
             </div>
-            <div className="flex items-center gap-1 rounded-full bg-muted p-1 w-fit mb-3">
+            <div className="flex items-center gap-1 bg-muted p-1 w-fit mb-3 rounded-sm">
               {["Day","Week","Month","Year"].map((p,i)=>(
-                <button key={p} className={`px-3 py-1 rounded-full text-xs font-medium ${i===0?"bg-primary text-primary-foreground":"text-muted-foreground"}`}>{p}</button>
+                <button key={p} className={`px-3 py-1 rounded-sm text-xs font-medium ${i===0?"bg-primary text-primary-foreground":"text-muted-foreground"}`}>{p}</button>
               ))}
             </div>
+
             <div className="flex items-center gap-4">
               <ResponsiveContainer width="55%" height={160}>
                 <PieChart>
