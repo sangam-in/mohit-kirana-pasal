@@ -34,21 +34,27 @@ export function AppSidebar() {
 
   return (
     <aside className="hidden lg:flex flex-col w-20 shrink-0 h-screen sticky top-0 py-6 px-3 gap-4 items-center bg-transparent">
-      {/* Brand */}
-      <Link to="/" className="w-11 h-11 rounded-2xl bg-primary text-primary-foreground flex items-center justify-center shadow-soft">
-        <Store className="w-5 h-5" />
+      {/* Brand — rotated square */}
+      <Link
+        to="/"
+        className="w-11 h-11 rotate-45 bg-primary text-primary-foreground flex items-center justify-center shadow-soft"
+      >
+        <Store className="w-5 h-5 -rotate-45" />
       </Link>
 
-      {/* Primary nav pill container */}
-      <nav className="mt-2 flex flex-col gap-1.5 rounded-full bg-card border border-border p-2 shadow-soft">
-        {items.map((it) => {
+      {/* Primary nav — squared rail with mixed corner treatments */}
+      <nav className="mt-2 flex flex-col gap-1.5 bg-card border border-border p-2 shadow-soft clip-notch">
+        {items.map((it, i) => {
           const active = isActive(it.url);
+          // alternate shapes: square, cut-corner, chamfered
+          const shape =
+            i % 3 === 0 ? "rounded-none" : i % 3 === 1 ? "rounded-md" : "clip-notch";
           return (
             <Link
               key={it.url}
               to={it.url}
               title={it.title}
-              className={`w-11 h-11 rounded-full flex items-center justify-center transition-all ${
+              className={`w-11 h-11 ${shape} flex items-center justify-center transition-all ${
                 active
                   ? "bg-primary text-primary-foreground shadow-sm"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -60,24 +66,24 @@ export function AppSidebar() {
         })}
       </nav>
 
-      {/* Utility icons */}
+      {/* Utility icons — small squares */}
       <div className="flex flex-col gap-1 mt-1">
         {utility.map((u) => (
           <button
             key={u.title}
             title={u.title}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition"
+            className="w-10 h-10 rounded-sm flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition"
           >
             <u.icon className="w-[17px] h-[17px]" />
           </button>
         ))}
       </div>
 
-      <div className="mt-auto flex flex-col items-center gap-2">
+      <div className="mt-auto flex flex-col items-center gap-3">
         <Link
           to="/settings"
           title="Settings"
-          className={`w-10 h-10 rounded-full flex items-center justify-center transition ${
+          className={`w-10 h-10 rounded-sm flex items-center justify-center transition ${
             isActive("/settings")
               ? "bg-primary text-primary-foreground"
               : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -85,7 +91,8 @@ export function AppSidebar() {
         >
           <Settings className="w-[17px] h-[17px]" />
         </Link>
-        <div className="w-9 h-9 rounded-full bg-gradient-iridescent border-2 border-card shadow-soft" />
+        {/* Iridescent avatar as hex */}
+        <div className="w-10 h-10 bg-gradient-iridescent shadow-soft shape-hex" />
       </div>
     </aside>
   );

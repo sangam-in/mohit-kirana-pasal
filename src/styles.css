@@ -56,7 +56,8 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.5rem;
+
 
   /* Light, near-white background like the reference */
   --background: oklch(0.975 0.003 285);
@@ -193,3 +194,16 @@
 @utility shadow-soft {
   box-shadow: var(--shadow-md);
 }
+@utility clip-notch {
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+}
+@utility clip-slant {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+}
+@utility shape-squircle {
+  border-radius: 32% 68% 55% 45% / 45% 45% 55% 55%;
+}
+@utility shape-hex {
+  clip-path: polygon(25% 4%, 75% 4%, 100% 50%, 75% 96%, 25% 96%, 0% 50%);
+}
+

@@ -37,12 +37,12 @@ function Dashboard() {
       {/* Top bar: pill tabs + search + profile */}
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
         <div className="flex items-center gap-2 min-w-0 overflow-x-auto">
-          <div className="flex items-center gap-1 rounded-full bg-card border border-border p-1 shadow-soft shrink-0">
+          <div className="flex items-center gap-1 bg-card border border-border p-1 shadow-soft shrink-0 clip-notch">
             {tabs.map((t) => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                className={`px-4 py-2 rounded-sm text-sm font-medium transition ${
                   tab === t ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -50,23 +50,25 @@ function Dashboard() {
               </button>
             ))}
           </div>
+
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          <div className="hidden md:flex items-center gap-2 rounded-full bg-card border border-border px-4 py-2 shadow-soft w-64">
+          <div className="hidden md:flex items-center gap-2 bg-card border border-border px-4 py-2 shadow-soft w-64 clip-notch">
             <Search className="w-4 h-4 text-muted-foreground" />
             <input
               placeholder="Search products, customers…"
               className="bg-transparent text-sm outline-none flex-1 placeholder:text-muted-foreground"
             />
           </div>
-          <button className="w-10 h-10 rounded-full bg-coral text-white flex items-center justify-center shadow-soft">
-            <span className="text-lg font-bold leading-none -mt-0.5">+</span>
+          <button className="w-10 h-10 rotate-45 bg-coral text-white flex items-center justify-center shadow-soft">
+            <span className="text-lg font-bold leading-none -rotate-45">+</span>
           </button>
-          <button className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center relative shadow-soft">
+          <button className="w-10 h-10 rounded-sm bg-card border border-border flex items-center justify-center relative shadow-soft">
             <Bell className="w-4 h-4" />
             <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-coral text-white text-[10px] font-bold flex items-center justify-center">2</span>
           </button>
-          <div className="w-10 h-10 rounded-full bg-gradient-iridescent border-2 border-card shadow-soft" />
+          <div className="w-10 h-10 bg-gradient-iridescent border-2 border-card shadow-soft shape-hex" />
+
         </div>
       </header>
 
@@ -84,12 +86,13 @@ function Dashboard() {
               </div>
             ))}
           </div>
-          <button className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium shadow-soft hover:opacity-90">
+          <button className="inline-flex items-center gap-2 rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium shadow-soft hover:opacity-90">
             <Plus className="w-4 h-4" /> New Sale
           </button>
-          <button className="inline-flex items-center gap-2 rounded-full bg-card border border-border px-4 py-2 text-sm font-medium shadow-soft">
+          <button className="inline-flex items-center gap-2 rounded-md bg-card border border-border px-4 py-2 text-sm font-medium shadow-soft">
             Aug 2026 <span className="text-muted-foreground">▾</span>
           </button>
+
           <span className="text-sm text-muted-foreground pl-2 border-l border-border ml-1">My Store</span>
         </div>
       </div>
@@ -97,23 +100,24 @@ function Dashboard() {
       {/* Main grid: left (balance+expenses) / middle (budget+expenses breakdown) / right (card+list) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* LEFT — Balance card w/ iridescent orb + bar chart */}
-        <section className="lg:col-span-5 rounded-3xl bg-card border border-border shadow-soft p-5">
+        <section className="lg:col-span-5 rounded-lg bg-card border border-border shadow-soft p-5 clip-notch">
           <div className="flex items-center justify-between">
             <h3 className="font-display font-semibold text-lg">Balance</h3>
-            <button className="w-7 h-7 rounded-full hover:bg-muted flex items-center justify-center text-muted-foreground">×</button>
+            <button className="w-7 h-7 rounded-sm hover:bg-muted flex items-center justify-center text-muted-foreground">×</button>
           </div>
 
           <div className="mt-4 flex items-center justify-center">
-            <div className="w-48 h-48 rounded-full bg-gradient-iridescent shadow-elegant" />
+            <div className="w-48 h-48 shape-squircle bg-gradient-iridescent shadow-elegant" />
           </div>
 
-          <div className="mt-4 mx-auto flex items-center gap-1 rounded-full bg-muted p-1 w-fit">
+          <div className="mt-4 mx-auto flex items-center gap-1 bg-muted p-1 w-fit rounded-sm">
             {["Cash", "QR", "Khata"].map((s, i) => (
-              <button key={s} className={`px-4 py-1.5 rounded-full text-xs font-medium ${i === 0 ? "bg-card shadow-sm" : "text-muted-foreground"}`}>{s}</button>
+              <button key={s} className={`px-4 py-1.5 rounded-sm text-xs font-medium ${i === 0 ? "bg-card shadow-sm" : "text-muted-foreground"}`}>{s}</button>
             ))}
           </div>
 
-          <div className="mt-5 rounded-2xl bg-muted/60 p-4">
+          <div className="mt-5 rounded-md bg-muted/60 p-4">
+
             <div className="text-xs text-muted-foreground">Profit in Aug 2026</div>
             <div className="text-3xl font-display font-bold mt-1">{formatNPR(53180)}</div>
             <div className="mt-3 grid grid-cols-2 gap-3">
@@ -146,12 +150,12 @@ function Dashboard() {
         {/* MIDDLE column */}
         <section className="lg:col-span-4 space-y-5">
           {/* Monthly budget */}
-          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+          <div className="rounded-lg bg-card border border-border shadow-soft p-5 clip-slant">
             <div className="flex items-center justify-between">
               <h3 className="font-display font-semibold text-lg">Monthly Budget</h3>
               <div className="flex gap-1">
-                <button className="w-7 h-7 rounded-full hover:bg-muted flex items-center justify-center"><MoreHorizontal className="w-4 h-4" /></button>
-                <button className="w-7 h-7 rounded-full hover:bg-muted flex items-center justify-center text-muted-foreground">↗</button>
+                <button className="w-7 h-7 rounded-sm hover:bg-muted flex items-center justify-center"><MoreHorizontal className="w-4 h-4" /></button>
+                <button className="w-7 h-7 rounded-sm hover:bg-muted flex items-center justify-center text-muted-foreground">↗</button>
               </div>
             </div>
             <div className="mt-4 flex items-baseline justify-between">
@@ -164,24 +168,25 @@ function Dashboard() {
                 <div className="text-lg font-display font-bold mt-0.5">{formatNPR(16000)}</div>
               </div>
             </div>
-            <div className="mt-3 h-2 rounded-full bg-muted overflow-hidden">
-              <div className="h-full rounded-full bg-gradient-to-r from-coral via-orange-400 to-purple-400" style={{ width: "60%" }} />
+            <div className="mt-3 h-2 rounded-none bg-muted overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-coral via-orange-400 to-purple-400" style={{ width: "60%" }} />
             </div>
           </div>
 
           {/* Expenses breakdown w/ donut */}
-          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+          <div className="rounded-lg bg-card border border-border shadow-soft p-5">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-display font-semibold text-lg">Expenses</h3>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 Income <span className="text-coral font-semibold">↑</span>
               </div>
             </div>
-            <div className="flex items-center gap-1 rounded-full bg-muted p-1 w-fit mb-3">
+            <div className="flex items-center gap-1 bg-muted p-1 w-fit mb-3 rounded-sm">
               {["Day","Week","Month","Year"].map((p,i)=>(
-                <button key={p} className={`px-3 py-1 rounded-full text-xs font-medium ${i===0?"bg-primary text-primary-foreground":"text-muted-foreground"}`}>{p}</button>
+                <button key={p} className={`px-3 py-1 rounded-sm text-xs font-medium ${i===0?"bg-primary text-primary-foreground":"text-muted-foreground"}`}>{p}</button>
               ))}
             </div>
+
             <div className="flex items-center gap-4">
               <ResponsiveContainer width="55%" height={160}>
                 <PieChart>
@@ -209,7 +214,7 @@ function Dashboard() {
         {/* RIGHT column */}
         <section className="lg:col-span-3 space-y-5">
           {/* Iridescent card */}
-          <div className="rounded-3xl p-5 bg-gradient-iridescent shadow-elegant text-white relative overflow-hidden aspect-[1.6/1]">
+          <div className="rounded-lg p-5 bg-gradient-iridescent shadow-elegant text-white relative overflow-hidden aspect-[1.6/1] clip-slant">
             <div className="flex items-start justify-between">
               <span className="text-sm font-medium opacity-90">Cash on hand</span>
               <Wifi className="w-4 h-4 opacity-90" />
@@ -221,15 +226,15 @@ function Dashboard() {
             </div>
           </div>
 
-          <button className="w-full rounded-full bg-card border border-border py-3 text-sm font-medium shadow-soft flex items-center justify-center gap-2 hover:bg-muted transition">
+          <button className="w-full rounded-md bg-card border border-border py-3 text-sm font-medium shadow-soft flex items-center justify-center gap-2 hover:bg-muted transition">
             <Plus className="w-4 h-4" /> Add New Account
           </button>
 
           {/* Quick Khata */}
-          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+          <div className="rounded-lg bg-card border border-border shadow-soft p-5">
             <h3 className="font-display font-semibold">Quick Khata</h3>
             <div className="mt-3 flex items-center gap-2">
-              <button className="w-9 h-9 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
+              <button className="w-9 h-9 rounded-sm bg-muted flex items-center justify-center text-muted-foreground">
                 <Plus className="w-4 h-4" />
               </button>
               <div className="flex -space-x-2">
@@ -243,12 +248,12 @@ function Dashboard() {
           </div>
 
           {/* Last transactions */}
-          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+          <div className="rounded-lg bg-card border border-border shadow-soft p-5">
             <h3 className="font-display font-semibold mb-3">Last Transactions</h3>
             <div className="space-y-3">
               {recentSales.slice(0, 3).map((s) => (
                 <div key={s.id} className="flex items-center gap-3">
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                  <div className={`w-9 h-9 rounded-sm flex items-center justify-center text-[10px] font-bold ${
                     s.method === "cash" ? "bg-success/15 text-success-foreground" :
                     s.method === "qr" ? "bg-accent text-accent-foreground" :
                     "bg-warning/20 text-warning-foreground"
@@ -264,6 +269,7 @@ function Dashboard() {
               ))}
             </div>
           </div>
+
         </section>
       </div>
 
@@ -275,15 +281,15 @@ function Dashboard() {
           { label: "Outstanding Khata", value: formatNPR(outstanding), sub: `${customers.filter(c=>c.balance>0).length} customers`, icon: BookOpen },
           { label: "Low-Stock Alerts", value: String(lowStock.length), sub: "Restock today", icon: AlertTriangle, tone: "warn" },
         ].map((s) => (
-          <div key={s.label} className="rounded-3xl bg-card border border-border p-4 shadow-soft">
+          <div key={s.label} className="rounded-lg bg-card border border-border p-4 shadow-soft clip-notch">
             <div className="flex items-start justify-between">
               <div className="text-xs text-muted-foreground">{s.label}</div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              <div className={`w-8 h-8 rounded-sm rotate-45 flex items-center justify-center ${
                 s.tone === "coral" ? "bg-coral/15 text-coral" :
                 s.tone === "warn" ? "bg-warning/20 text-warning-foreground" :
                 "bg-muted text-foreground"
               }`}>
-                <s.icon className="w-4 h-4" />
+                <s.icon className="w-4 h-4 -rotate-45" />
               </div>
             </div>
             <div className="mt-2 text-2xl font-display font-bold">{s.value}</div>
@@ -292,15 +298,17 @@ function Dashboard() {
         ))}
       </div>
 
+
       {/* Top debtors */}
-      <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+      <div className="rounded-lg bg-card border border-border shadow-soft p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-display font-semibold">Top Khata debtors</h3>
           <a className="text-xs font-medium text-coral" href="/khata">View all</a>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {topDebtors.map((c) => (
-            <div key={c.id} className="flex items-center gap-3 p-2 rounded-2xl hover:bg-muted transition">
+            <div key={c.id} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted transition">
+
               <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-white" style={{ background: c.avatarColor }}>
                 {c.name.charAt(0)}
               </div>
