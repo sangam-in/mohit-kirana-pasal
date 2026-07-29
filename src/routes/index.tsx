@@ -100,23 +100,24 @@ function Dashboard() {
       {/* Main grid: left (balance+expenses) / middle (budget+expenses breakdown) / right (card+list) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* LEFT — Balance card w/ iridescent orb + bar chart */}
-        <section className="lg:col-span-5 rounded-3xl bg-card border border-border shadow-soft p-5">
+        <section className="lg:col-span-5 rounded-lg bg-card border border-border shadow-soft p-5 clip-notch">
           <div className="flex items-center justify-between">
             <h3 className="font-display font-semibold text-lg">Balance</h3>
-            <button className="w-7 h-7 rounded-full hover:bg-muted flex items-center justify-center text-muted-foreground">×</button>
+            <button className="w-7 h-7 rounded-sm hover:bg-muted flex items-center justify-center text-muted-foreground">×</button>
           </div>
 
           <div className="mt-4 flex items-center justify-center">
-            <div className="w-48 h-48 rounded-full bg-gradient-iridescent shadow-elegant" />
+            <div className="w-48 h-48 shape-squircle bg-gradient-iridescent shadow-elegant" />
           </div>
 
-          <div className="mt-4 mx-auto flex items-center gap-1 rounded-full bg-muted p-1 w-fit">
+          <div className="mt-4 mx-auto flex items-center gap-1 bg-muted p-1 w-fit rounded-sm">
             {["Cash", "QR", "Khata"].map((s, i) => (
-              <button key={s} className={`px-4 py-1.5 rounded-full text-xs font-medium ${i === 0 ? "bg-card shadow-sm" : "text-muted-foreground"}`}>{s}</button>
+              <button key={s} className={`px-4 py-1.5 rounded-sm text-xs font-medium ${i === 0 ? "bg-card shadow-sm" : "text-muted-foreground"}`}>{s}</button>
             ))}
           </div>
 
-          <div className="mt-5 rounded-2xl bg-muted/60 p-4">
+          <div className="mt-5 rounded-md bg-muted/60 p-4">
+
             <div className="text-xs text-muted-foreground">Profit in Aug 2026</div>
             <div className="text-3xl font-display font-bold mt-1">{formatNPR(53180)}</div>
             <div className="mt-3 grid grid-cols-2 gap-3">
