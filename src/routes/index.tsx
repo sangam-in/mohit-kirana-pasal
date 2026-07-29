@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import heroImg from "@/assets/hero-shopkeeper.jpg";
-import { Search, Download, Plus, TrendingUp, Package, BookOpen, AlertTriangle, ArrowUpRight } from "lucide-react";
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell } from "recharts";
+import { Search, Plus, Bell, MoreHorizontal, ArrowUpRight, TrendingUp, Package, BookOpen, AlertTriangle, Wifi } from "lucide-react";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell, PieChart, Pie } from "recharts";
 import { cashflowByMonth, customers, formatNPR, products, recentSales } from "@/lib/mock/data";
+import { useState } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,176 +16,304 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
-function Stat({ label, value, sub, tone = "default", icon: Icon }: any) {
-  const toneMap: Record<string, string> = {
-    default: "bg-card",
-    primary: "bg-gradient-hero text-primary-foreground",
-  };
-  return (
-    <div className={`rounded-2xl p-5 shadow-soft border border-border ${toneMap[tone]}`}>
-      <div className="flex items-start justify-between">
-        <div>
-          <div className={`text-xs font-medium ${tone === "primary" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{label}</div>
-          <div className={`mt-2 text-2xl font-display font-bold ${tone === "primary" ? "" : "text-foreground"}`}>{value}</div>
-        </div>
-        {Icon && (
-          <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${tone === "primary" ? "bg-white/15" : "bg-accent text-primary"}`}>
-            <Icon className="w-4 h-4" />
-          </div>
-        )}
-      </div>
-      {sub && (
-        <div className={`mt-3 text-xs flex items-center gap-1.5 ${tone === "primary" ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-          {sub}
-        </div>
-      )}
-    </div>
-  );
-}
+const tabs = ["Dashboard", "Analytics", "Charts", "Khata"] as const;
 
 function Dashboard() {
+  const [tab, setTab] = useState<typeof tabs[number]>("Dashboard");
   const lowStock = products.filter((p) => p.packStock <= p.lowStockAt);
   const outstanding = customers.reduce((s, c) => s + c.balance, 0);
   const topDebtors = [...customers].filter((c) => c.balance > 0).sort((a, b) => b.balance - a.balance).slice(0, 4);
 
+  const expenseSlice = [
+    { name: "Grocery", value: 42, color: "oklch(0.65 0.22 25)" },
+    { name: "Drinks", value: 22, color: "oklch(0.72 0.16 60)" },
+    { name: "Snacks", value: 18, color: "oklch(0.58 0.2 300)" },
+    { name: "Household", value: 12, color: "oklch(0.72 0.16 200)" },
+    { name: "Other", value: 6, color: "oklch(0.5 0.02 275)" },
+  ];
+
   return (
-    <div className="p-6 lg:p-8 max-w-[1500px] mx-auto space-y-6">
-      {/* Hero */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-hero shadow-elegant">
-        <div className="grid grid-cols-1 md:grid-cols-2 items-center">
-          <div className="p-8 lg:p-10 text-primary-foreground">
-            <div className="text-sm opacity-80">Namaste, Mohit Dai 👋</div>
-            <h1 className="mt-2 text-3xl lg:text-4xl font-display font-bold leading-tight">
-              Aja ko bikri ramro chha
-            </h1>
-            <p className="mt-2 text-primary-foreground/80 text-sm max-w-md">
-              Sales are up 12% vs. yesterday. 3 items need restocking and 4 Khata customers owe money.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2">
-              <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-primary-foreground/70" />
-                <input placeholder="Search products, customers…" className="pl-9 pr-4 py-2.5 rounded-xl bg-white/15 text-sm text-primary-foreground placeholder:text-primary-foreground/60 border border-white/20 backdrop-blur w-64 outline-none focus:bg-white/25" />
+    <div className="p-5 lg:p-7 max-w-[1500px] mx-auto space-y-5">
+      {/* Top bar: pill tabs + search + profile */}
+      <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+        <div className="flex items-center gap-2 min-w-0 overflow-x-auto">
+          <div className="flex items-center gap-1 rounded-full bg-card border border-border p-1 shadow-soft shrink-0">
+            {tabs.map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                  tab === t ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="hidden md:flex items-center gap-2 rounded-full bg-card border border-border px-4 py-2 shadow-soft w-64">
+            <Search className="w-4 h-4 text-muted-foreground" />
+            <input
+              placeholder="Search products, customers…"
+              className="bg-transparent text-sm outline-none flex-1 placeholder:text-muted-foreground"
+            />
+          </div>
+          <button className="w-10 h-10 rounded-full bg-coral text-white flex items-center justify-center shadow-soft">
+            <span className="text-lg font-bold leading-none -mt-0.5">+</span>
+          </button>
+          <button className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center relative shadow-soft">
+            <Bell className="w-4 h-4" />
+            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-coral text-white text-[10px] font-bold flex items-center justify-center">2</span>
+          </button>
+          <div className="w-10 h-10 rounded-full bg-gradient-iridescent border-2 border-card shadow-soft" />
+        </div>
+      </header>
+
+      {/* Greeting */}
+      <div className="flex items-end justify-between flex-wrap gap-3">
+        <div>
+          <h1 className="text-3xl lg:text-4xl font-display font-bold tracking-tight">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">Namaste, Mohit Dai 👋 · Aja ko bikri ramro chha</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex -space-x-2">
+            {customers.slice(0, 3).map((c) => (
+              <div key={c.id} className="w-8 h-8 rounded-full border-2 border-background text-white text-xs font-semibold flex items-center justify-center" style={{ background: c.avatarColor }}>
+                {c.name.charAt(0)}
               </div>
-              <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/15 text-sm text-primary-foreground border border-white/20 hover:bg-white/25 transition">
-                <Download className="w-4 h-4" /> Export
-              </button>
-              <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-primary text-sm font-medium hover:opacity-95 transition shadow-soft">
-                <Plus className="w-4 h-4" /> New Sale
-              </button>
-            </div>
+            ))}
           </div>
-          <div className="hidden md:block relative h-72">
-            <img src={heroImg} alt="Shopkeeper illustration" className="absolute inset-0 w-full h-full object-cover object-right" />
-          </div>
+          <button className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium shadow-soft hover:opacity-90">
+            <Plus className="w-4 h-4" /> New Sale
+          </button>
+          <button className="inline-flex items-center gap-2 rounded-full bg-card border border-border px-4 py-2 text-sm font-medium shadow-soft">
+            Aug 2026 <span className="text-muted-foreground">▾</span>
+          </button>
+          <span className="text-sm text-muted-foreground pl-2 border-l border-border ml-1">My Store</span>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Stat label="Today's Sales" value={formatNPR(18420)} sub={<><ArrowUpRight className="w-3 h-3 text-success" /> <span className="text-success font-medium">+12%</span> vs yesterday</>} tone="primary" icon={TrendingUp} />
-        <Stat label="Items Sold" value="127" sub={<><span className="text-success font-medium">+8</span> since morning</>} icon={Package} />
-        <Stat label="Outstanding Khata" value={formatNPR(outstanding)} sub={<><span>Across </span><span className="font-medium">{customers.filter(c=>c.balance>0).length} customers</span></>} icon={BookOpen} />
-        <Stat label="Low-Stock Alerts" value={String(lowStock.length)} sub={<><AlertTriangle className="w-3 h-3 text-warning" /> Restock today</>} icon={AlertTriangle} />
+      {/* Main grid: left (balance+expenses) / middle (budget+expenses breakdown) / right (card+list) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* LEFT — Balance card w/ iridescent orb + bar chart */}
+        <section className="lg:col-span-5 rounded-3xl bg-card border border-border shadow-soft p-5">
+          <div className="flex items-center justify-between">
+            <h3 className="font-display font-semibold text-lg">Balance</h3>
+            <button className="w-7 h-7 rounded-full hover:bg-muted flex items-center justify-center text-muted-foreground">×</button>
+          </div>
+
+          <div className="mt-4 flex items-center justify-center">
+            <div className="w-48 h-48 rounded-full bg-gradient-iridescent shadow-elegant" />
+          </div>
+
+          <div className="mt-4 mx-auto flex items-center gap-1 rounded-full bg-muted p-1 w-fit">
+            {["Cash", "QR", "Khata"].map((s, i) => (
+              <button key={s} className={`px-4 py-1.5 rounded-full text-xs font-medium ${i === 0 ? "bg-card shadow-sm" : "text-muted-foreground"}`}>{s}</button>
+            ))}
+          </div>
+
+          <div className="mt-5 rounded-2xl bg-muted/60 p-4">
+            <div className="text-xs text-muted-foreground">Profit in Aug 2026</div>
+            <div className="text-3xl font-display font-bold mt-1">{formatNPR(53180)}</div>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <div>
+                <div className="text-xs text-muted-foreground">Expenses</div>
+                <div className="text-sm font-semibold mt-0.5">{formatNPR(14400)}</div>
+              </div>
+              <div>
+                <div className="text-xs text-muted-foreground">Income</div>
+                <div className="text-sm font-semibold mt-0.5">{formatNPR(67500)}</div>
+              </div>
+            </div>
+
+            <ResponsiveContainer width="100%" height={140} className="mt-3">
+              <BarChart data={cashflowByMonth.slice(0, 6)}>
+                <XAxis dataKey="m" stroke="oklch(0.55 0.02 275)" fontSize={10} tickLine={false} axisLine={false} />
+                <YAxis hide />
+                <Tooltip cursor={{ fill: "oklch(0.94 0.01 285 / 0.6)" }} contentStyle={{ borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)", fontSize: 12 }} />
+                <Bar dataKey="cash" fill="oklch(0.65 0.22 25)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="qr" fill="oklch(0.58 0.2 300)" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+            <div className="flex items-center justify-center gap-4 text-[11px] text-muted-foreground mt-1">
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-coral" />Income</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full" style={{background:"oklch(0.58 0.2 300)"}} />Profit</span>
+            </div>
+          </div>
+        </section>
+
+        {/* MIDDLE column */}
+        <section className="lg:col-span-4 space-y-5">
+          {/* Monthly budget */}
+          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+            <div className="flex items-center justify-between">
+              <h3 className="font-display font-semibold text-lg">Monthly Budget</h3>
+              <div className="flex gap-1">
+                <button className="w-7 h-7 rounded-full hover:bg-muted flex items-center justify-center"><MoreHorizontal className="w-4 h-4" /></button>
+                <button className="w-7 h-7 rounded-full hover:bg-muted flex items-center justify-center text-muted-foreground">↗</button>
+              </div>
+            </div>
+            <div className="mt-4 flex items-baseline justify-between">
+              <div>
+                <div className="text-xs text-muted-foreground">Spent</div>
+                <div className="text-lg font-display font-bold mt-0.5">{formatNPR(24000)} <span className="text-muted-foreground text-sm font-normal">/ {formatNPR(40000)}</span></div>
+              </div>
+              <div className="text-right">
+                <div className="text-xs text-muted-foreground">Available</div>
+                <div className="text-lg font-display font-bold mt-0.5">{formatNPR(16000)}</div>
+              </div>
+            </div>
+            <div className="mt-3 h-2 rounded-full bg-muted overflow-hidden">
+              <div className="h-full rounded-full bg-gradient-to-r from-coral via-orange-400 to-purple-400" style={{ width: "60%" }} />
+            </div>
+          </div>
+
+          {/* Expenses breakdown w/ donut */}
+          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-display font-semibold text-lg">Expenses</h3>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                Income <span className="text-coral font-semibold">↑</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 rounded-full bg-muted p-1 w-fit mb-3">
+              {["Day","Week","Month","Year"].map((p,i)=>(
+                <button key={p} className={`px-3 py-1 rounded-full text-xs font-medium ${i===0?"bg-primary text-primary-foreground":"text-muted-foreground"}`}>{p}</button>
+              ))}
+            </div>
+            <div className="flex items-center gap-4">
+              <ResponsiveContainer width="55%" height={160}>
+                <PieChart>
+                  <Pie data={expenseSlice} innerRadius={45} outerRadius={70} paddingAngle={2} dataKey="value">
+                    {expenseSlice.map((s,i)=>(<Cell key={i} fill={s.color} />))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex-1 space-y-2">
+                <div>
+                  <div className="text-xs text-muted-foreground">Total</div>
+                  <div className="text-xl font-display font-bold">{formatNPR(14400)}</div>
+                </div>
+                {expenseSlice.map((s)=>(
+                  <div key={s.name} className="flex items-center gap-2 text-xs">
+                    <span className="w-2 h-2 rounded-full" style={{background:s.color}} />
+                    <span className="text-muted-foreground">{s.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* RIGHT column */}
+        <section className="lg:col-span-3 space-y-5">
+          {/* Iridescent card */}
+          <div className="rounded-3xl p-5 bg-gradient-iridescent shadow-elegant text-white relative overflow-hidden aspect-[1.6/1]">
+            <div className="flex items-start justify-between">
+              <span className="text-sm font-medium opacity-90">Cash on hand</span>
+              <Wifi className="w-4 h-4 opacity-90" />
+            </div>
+            <div className="mt-6 text-3xl font-display font-bold tracking-tight">{formatNPR(35400)}</div>
+            <div className="mt-auto absolute bottom-4 left-5 right-5 flex items-center justify-between text-xs opacity-90">
+              <span>•••• 5688</span>
+              <span className="font-semibold">MOHIT KC</span>
+            </div>
+          </div>
+
+          <button className="w-full rounded-full bg-card border border-border py-3 text-sm font-medium shadow-soft flex items-center justify-center gap-2 hover:bg-muted transition">
+            <Plus className="w-4 h-4" /> Add New Account
+          </button>
+
+          {/* Quick Khata */}
+          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+            <h3 className="font-display font-semibold">Quick Khata</h3>
+            <div className="mt-3 flex items-center gap-2">
+              <button className="w-9 h-9 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
+                <Plus className="w-4 h-4" />
+              </button>
+              <div className="flex -space-x-2">
+                {customers.slice(0, 5).map((c) => (
+                  <div key={c.id} className="w-9 h-9 rounded-full border-2 border-card text-white text-xs font-semibold flex items-center justify-center" style={{ background: c.avatarColor }}>
+                    {c.name.charAt(0)}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Last transactions */}
+          <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+            <h3 className="font-display font-semibold mb-3">Last Transactions</h3>
+            <div className="space-y-3">
+              {recentSales.slice(0, 3).map((s) => (
+                <div key={s.id} className="flex items-center gap-3">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                    s.method === "cash" ? "bg-success/15 text-success-foreground" :
+                    s.method === "qr" ? "bg-accent text-accent-foreground" :
+                    "bg-warning/20 text-warning-foreground"
+                  }`}>{s.method.toUpperCase()}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium truncate">{s.items[0].name}</div>
+                    <div className="text-[11px] text-muted-foreground">{s.method === "khata" ? "Khata" : "Sale"}</div>
+                  </div>
+                  <div className={`text-sm font-semibold ${s.method === "khata" ? "text-coral" : ""}`}>
+                    {s.method === "khata" ? "-" : "+"}{formatNPR(s.total)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
 
-      {/* Charts + right column */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 rounded-2xl bg-card border border-border p-5 shadow-soft">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="font-display font-semibold text-foreground">Cash flow</h3>
-              <div className="text-xs text-muted-foreground">Cash · QR · Khata split by month</div>
-            </div>
-            <div className="flex items-center gap-3 text-xs">
-              <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-success" />Cash</div>
-              <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-primary" />QR</div>
-              <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-warning" />Khata</div>
-            </div>
-          </div>
-          <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={cashflowByMonth} barGap={4}>
-              <XAxis dataKey="m" stroke="oklch(0.5 0.03 275)" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis stroke="oklch(0.5 0.03 275)" fontSize={11} tickLine={false} axisLine={false} />
-              <Tooltip cursor={{ fill: "oklch(0.94 0.04 305 / 0.5)" }} contentStyle={{ borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)" }} />
-              <Bar dataKey="cash" fill="oklch(0.68 0.15 155)" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="qr" fill="oklch(0.5 0.22 285)" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="khata" fill="oklch(0.82 0.15 75)" radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="rounded-2xl bg-card border border-border p-5 shadow-soft">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-display font-semibold">August summary</h3>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-success/15 text-success-foreground font-medium">+8%</span>
-          </div>
-          {[
-            { label: "Income", value: 12320, color: "bg-primary" },
-            { label: "Expense", value: 4540, color: "bg-warning" },
-            { label: "Net", value: 7780, color: "bg-success" },
-          ].map((row) => (
-            <div key={row.label} className="mb-4">
-              <div className="flex items-center justify-between text-sm mb-1.5">
-                <span className="text-muted-foreground">{row.label}</span>
-                <span className="font-display font-semibold">{formatNPR(row.value)}</span>
+      {/* Secondary stat row */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: "Today's Sales", value: formatNPR(18420), sub: "+12% vs yesterday", icon: TrendingUp, tone: "coral" },
+          { label: "Items Sold", value: "127", sub: "+8 since morning", icon: Package },
+          { label: "Outstanding Khata", value: formatNPR(outstanding), sub: `${customers.filter(c=>c.balance>0).length} customers`, icon: BookOpen },
+          { label: "Low-Stock Alerts", value: String(lowStock.length), sub: "Restock today", icon: AlertTriangle, tone: "warn" },
+        ].map((s) => (
+          <div key={s.label} className="rounded-3xl bg-card border border-border p-4 shadow-soft">
+            <div className="flex items-start justify-between">
+              <div className="text-xs text-muted-foreground">{s.label}</div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                s.tone === "coral" ? "bg-coral/15 text-coral" :
+                s.tone === "warn" ? "bg-warning/20 text-warning-foreground" :
+                "bg-muted text-foreground"
+              }`}>
+                <s.icon className="w-4 h-4" />
               </div>
-              <div className="h-2 rounded-full bg-muted overflow-hidden">
-                <div className={`h-full ${row.color} rounded-full`} style={{ width: `${Math.min(100, (row.value/12320)*100)}%` }} />
+            </div>
+            <div className="mt-2 text-2xl font-display font-bold">{s.value}</div>
+            <div className="mt-1 text-xs text-muted-foreground flex items-center gap-1"><ArrowUpRight className="w-3 h-3" />{s.sub}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Top debtors */}
+      <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-display font-semibold">Top Khata debtors</h3>
+          <a className="text-xs font-medium text-coral" href="/khata">View all</a>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {topDebtors.map((c) => (
+            <div key={c.id} className="flex items-center gap-3 p-2 rounded-2xl hover:bg-muted transition">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-white" style={{ background: c.avatarColor }}>
+                {c.name.charAt(0)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-medium text-sm truncate">{c.name}</div>
+                <div className="text-xs text-muted-foreground">{c.phone}</div>
+              </div>
+              <div className="text-right">
+                <div className="font-display font-bold text-coral">{formatNPR(c.balance)}</div>
+                <div className="text-xs text-muted-foreground">{c.lastActivity}</div>
               </div>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Bottom row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="rounded-2xl bg-card border border-border p-5 shadow-soft">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-display font-semibold">Top Khata debtors</h3>
-            <a className="text-xs text-primary font-medium" href="/khata">View all</a>
-          </div>
-          <div className="space-y-3">
-            {topDebtors.map((c) => (
-              <div key={c.id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-muted transition">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-white" style={{ background: c.avatarColor }}>
-                  {c.name.charAt(0)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm truncate">{c.name}</div>
-                  <div className="text-xs text-muted-foreground">{c.phone}</div>
-                </div>
-                <div className="text-right">
-                  <div className="font-display font-bold">{formatNPR(c.balance)}</div>
-                  <div className="text-xs text-muted-foreground">{c.lastActivity}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="rounded-2xl bg-card border border-border p-5 shadow-soft">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-display font-semibold">Recent sales</h3>
-            <a className="text-xs text-primary font-medium" href="/transactions">View all</a>
-          </div>
-          <div className="space-y-2">
-            {recentSales.slice(0, 5).map((s) => (
-              <div key={s.id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-muted transition">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-semibold ${
-                  s.method === "cash" ? "bg-success/15 text-success-foreground" :
-                  s.method === "qr" ? "bg-primary/15 text-primary" :
-                  "bg-warning/15 text-warning-foreground"
-                }`}>
-                  {s.method.toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm truncate">{s.items.map(i=>i.name).join(", ")}</div>
-                  <div className="text-xs text-muted-foreground">{s.date}</div>
-                </div>
-                <div className="font-display font-bold">{formatNPR(s.total)}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
