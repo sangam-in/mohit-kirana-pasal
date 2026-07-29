@@ -300,14 +300,15 @@ function Dashboard() {
 
 
       {/* Top debtors */}
-      <div className="rounded-3xl bg-card border border-border shadow-soft p-5">
+      <div className="rounded-lg bg-card border border-border shadow-soft p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-display font-semibold">Top Khata debtors</h3>
           <a className="text-xs font-medium text-coral" href="/khata">View all</a>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {topDebtors.map((c) => (
-            <div key={c.id} className="flex items-center gap-3 p-2 rounded-2xl hover:bg-muted transition">
+            <div key={c.id} className="flex items-center gap-3 p-2 rounded-md hover:bg-muted transition">
+
               <div className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-white" style={{ background: c.avatarColor }}>
                 {c.name.charAt(0)}
               </div>
