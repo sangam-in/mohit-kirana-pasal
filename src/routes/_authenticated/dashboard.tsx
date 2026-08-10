@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Search, Plus, Bell, MoreHorizontal, ArrowUpRight, TrendingUp, Package, BookOpen, AlertTriangle, Wifi } from "lucide-react";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell, PieChart, Pie } from "recharts";
-import { cashflowByMonth, customers, formatNPR, products, recentSales } from "@/lib/mock/data";
+import { formatNPR, useCustomers, useProducts, useSales } from "@/lib/store-data";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -20,9 +20,28 @@ const tabs = ["Dashboard", "Analytics", "Charts", "Khata"] as const;
 
 function Dashboard() {
   const [tab, setTab] = useState<typeof tabs[number]>("Dashboard");
+  const { data: products = [] } = useProducts();
+  const { data: customers = [] } = useCustomers();
+  const { data: recentSales = [] } = useSales();
+
   const lowStock = products.filter((p) => p.packStock <= p.lowStockAt);
   const outstanding = customers.reduce((s, c) => s + c.balance, 0);
   const topDebtors = [...customers].filter((c) => c.balance > 0).sort((a, b) => b.balance - a.balance).slice(0, 4);
+
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const buckets = new Map<number, { cash: number; qr: number; khata: number }>();
+  for (const s of recentSales) {
+    const m = new Date().getMonth();
+    const b = buckets.get(m) ?? { cash: 0, qr: 0, khata: 0 };
+    b[s.method] += s.total;
+    buckets.set(m, b);
+  }
+  const cashflowByMonth = monthNames.slice(0, 6).map((m, i) => ({
+    m,
+    cash: buckets.get(i)?.cash ?? 0,
+    qr: buckets.get(i)?.qr ?? 0,
+    khata: buckets.get(i)?.khata ?? 0,
+  }));
 
   const expenseSlice = [
     { name: "Grocery", value: 42, color: "oklch(0.65 0.22 25)" },
