@@ -65,21 +65,48 @@ function POS() {
       : line.product.price;
   const total = cart.reduce((s, l) => s + priceOf(l) * l.qty, 0);
 
-  const checkout = () => {
+  const persist = async () => {
+    try {
+      await createSale.mutateAsync({
+        total,
+        method,
+        customerId,
+        items: cart.map((l) => ({
+          productId: l.product.id,
+          name: l.product.name,
+          qty: l.qty,
+          unit: l.unit,
+          price: priceOf(l),
+        })),
+      });
+      setCart([]);
+      setCustomerId(undefined);
+      return true;
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not save sale");
+      return false;
+    }
+  };
+
+  const checkout = async () => {
     if (!cart.length) return toast.error("Cart is empty");
     if (method === "khata" && !customerId) return toast.error("Select a Khata customer first");
     if (method === "qr") {
+      const amount = total;
       setAwaitingQR(true);
-      setTimeout(() => {
+      setTimeout(async () => {
         setAwaitingQR(false);
-        toast.success("Payment bhayeko chha ✓", { description: `${formatNPR(total)} received via QR` });
-        setCart([]);
+        if (await persist()) {
+          toast.success("Payment bhayeko chha ✓", { description: `${formatNPR(amount)} received via QR` });
+        }
       }, 2500);
       return;
     }
-    toast.success(method === "cash" ? "Cash sale recorded" : "Khata updated & SMS sent", { description: formatNPR(total) });
-    setCart([]);
-    setCustomerId(undefined);
+    const amount = total;
+    const wasKhata = method === "khata";
+    if (await persist()) {
+      toast.success(wasKhata ? "Khata updated & SMS sent" : "Cash sale recorded", { description: formatNPR(amount) });
+    }
   };
 
   return (
