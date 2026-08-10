@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Search, MessageCircle, ChevronRight } from "lucide-react";
-import { customers, formatNPR } from "@/lib/mock/data";
+import { formatNPR, useAddCustomer, useCustomers } from "@/lib/store-data";
 
 export const Route = createFileRoute("/_authenticated/khata")({
   head: () => ({
