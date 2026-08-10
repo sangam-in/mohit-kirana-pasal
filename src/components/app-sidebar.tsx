@@ -1,4 +1,5 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -11,10 +12,12 @@ import {
   Search,
   Globe,
   Shield,
+  LogOut,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const items = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Bikri (POS)", url: "/pos", icon: ShoppingCart },
   { title: "Saman (Inventory)", url: "/inventory", icon: Package },
   { title: "Khata", url: "/khata", icon: BookOpen },
@@ -30,13 +33,23 @@ const utility = [
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isActive = (path: string) => (path === "/" ? pathname === "/" : pathname.startsWith(path));
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const isActive = (path: string) => pathname.startsWith(path);
+
+  const signOut = async () => {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    navigate({ to: "/auth", replace: true });
+  };
+
 
   return (
     <aside className="hidden lg:flex flex-col w-20 shrink-0 h-screen sticky top-0 py-6 px-3 gap-4 items-center bg-transparent">
       {/* Brand — rotated square */}
       <Link
-        to="/"
+        to="/dashboard"
         className="w-11 h-11 rotate-45 bg-primary text-primary-foreground flex items-center justify-center shadow-soft"
       >
         <Store className="w-5 h-5 -rotate-45" />
