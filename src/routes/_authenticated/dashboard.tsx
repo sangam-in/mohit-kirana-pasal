@@ -43,13 +43,29 @@ function Dashboard() {
     khata: buckets.get(i)?.khata ?? 0,
   }));
 
-  const expenseSlice = [
-    { name: "Grocery", value: 42, color: "oklch(0.65 0.22 25)" },
-    { name: "Drinks", value: 22, color: "oklch(0.72 0.16 60)" },
-    { name: "Snacks", value: 18, color: "oklch(0.58 0.2 300)" },
-    { name: "Household", value: 12, color: "oklch(0.72 0.16 200)" },
-    { name: "Other", value: 6, color: "oklch(0.5 0.02 275)" },
-  ];
+  const totals = recentSales.reduce(
+    (a, s) => ({
+      all: a.all + s.total,
+      cash: a.cash + (s.method === "cash" ? s.total : 0),
+      qr: a.qr + (s.method === "qr" ? s.total : 0),
+      khata: a.khata + (s.method === "khata" ? s.total : 0),
+    }),
+    { all: 0, cash: 0, qr: 0, khata: 0 },
+  );
+  const todayKey = new Date().toLocaleDateString();
+  const todaySales = recentSales
+    .filter((s) => s.date.startsWith(todayKey))
+    .reduce((a, s) => a + s.total, 0);
+  const stockValue = products.reduce((a, p) => a + p.price * p.packStock, 0);
+
+  const catColors = ["oklch(0.65 0.22 25)", "oklch(0.72 0.16 60)", "oklch(0.58 0.2 300)", "oklch(0.72 0.16 200)", "oklch(0.5 0.02 275)"];
+  const catMap = new Map<string, number>();
+  for (const p of products) catMap.set(p.category, (catMap.get(p.category) ?? 0) + p.price * p.packStock);
+  const expenseSlice = [...catMap.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([name, value], i) => ({ name, value: Math.round(value), color: catColors[i] ?? catColors[4] }));
+
 
   return (
     <div className="p-5 lg:p-7 max-w-[1500px] mx-auto space-y-5">
