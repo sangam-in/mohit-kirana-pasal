@@ -18,8 +18,25 @@ export const Route = createFileRoute("/_authenticated/khata")({
 
 function KhataList() {
   const [q, setQ] = useState("");
+  const [adding, setAdding] = useState(false);
+  const [form, setForm] = useState({ name: "", phone: "" });
+  const { data: customers = [] } = useCustomers();
+  const addCustomer = useAddCustomer();
+
   const list = customers.filter((c) => c.name.toLowerCase().includes(q.toLowerCase()));
   const total = customers.reduce((s, c) => s + c.balance, 0);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await addCustomer.mutateAsync({ name: form.name, phone: form.phone });
+      setForm({ name: "", phone: "" });
+      setAdding(false);
+      toast.success("Customer added");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not add customer");
+    }
+  };
 
   return (
     <div className="p-6 lg:p-8 max-w-[1500px] mx-auto space-y-6">
@@ -28,8 +45,16 @@ function KhataList() {
           <h1 className="text-2xl font-display font-bold">Khata</h1>
           <p className="text-sm text-muted-foreground">Total outstanding: <span className="font-display font-semibold text-foreground">{formatNPR(total)}</span> across {customers.filter(c=>c.balance>0).length} customers</p>
         </div>
-        <button className="px-4 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-medium shadow-soft">+ New Customer</button>
+        <button onClick={() => setAdding((v) => !v)} className="px-4 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-medium shadow-soft">+ New Customer</button>
       </div>
+
+      {adding && (
+        <form onSubmit={submit} className="bg-card border border-border p-4 clip-notch flex flex-wrap gap-3">
+          <input required value={form.name} onChange={(e)=>setForm({...form, name:e.target.value})} placeholder="Customer name" className="flex-1 min-w-48 px-3 py-2 rounded-md bg-background border border-border text-sm outline-none focus:border-primary" />
+          <input value={form.phone} onChange={(e)=>setForm({...form, phone:e.target.value})} placeholder="Phone" className="flex-1 min-w-48 px-3 py-2 rounded-md bg-background border border-border text-sm outline-none focus:border-primary" />
+          <button type="submit" disabled={addCustomer.isPending} className="px-5 py-2 bg-primary text-primary-foreground text-sm font-medium clip-notch disabled:opacity-60">Save</button>
+        </form>
+      )}
 
       <div className="rounded-2xl bg-card border border-border shadow-soft overflow-hidden">
         <div className="p-4 border-b border-border">
