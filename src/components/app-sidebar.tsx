@@ -104,6 +104,13 @@ export function AppSidebar() {
         >
           <Settings className="w-[17px] h-[17px]" />
         </Link>
+        <button
+          onClick={signOut}
+          title="Sign out"
+          className="w-10 h-10 rounded-sm flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition"
+        >
+          <LogOut className="w-[17px] h-[17px]" />
+        </button>
         {/* Iridescent avatar as hex */}
         <div className="w-10 h-10 bg-gradient-iridescent shadow-soft shape-hex" />
       </div>
