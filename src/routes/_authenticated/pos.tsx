@@ -2,7 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Search, Trash2, Printer, Wifi, Wallet, BookOpen, QrCode, Volume2, Minus, Plus, ScanLine } from "lucide-react";
-import { customers, formatNPR, products, type PaymentMethod, type Product } from "@/lib/mock/data";
+import {
+  formatNPR,
+  useCustomers,
+  useProducts,
+  useCreateSale,
+  type PaymentMethod,
+  type Product,
+} from "@/lib/store-data";
 
 export const Route = createFileRoute("/_authenticated/pos")({
   head: () => ({
@@ -23,19 +30,20 @@ interface CartLine {
 }
 
 function POS() {
+  const { data: products = [] } = useProducts();
+  const { data: customers = [] } = useCustomers();
+  const createSale = useCreateSale();
+
   const [query, setQuery] = useState("");
   const [singleUnit, setSingleUnit] = useState(false);
-  const [cart, setCart] = useState<CartLine[]>([
-    { product: products[0], qty: 2, unit: "pack" },
-    { product: products[6], qty: 3, unit: "piece" },
-  ]);
+  const [cart, setCart] = useState<CartLine[]>([]);
   const [method, setMethod] = useState<PaymentMethod>("qr");
   const [customerId, setCustomerId] = useState<string | undefined>();
   const [awaitingQR, setAwaitingQR] = useState(false);
 
   const filtered = useMemo(
     () => products.filter((p) => p.name.toLowerCase().includes(query.toLowerCase()) || p.barcode.includes(query)),
-    [query]
+    [query, products]
   );
 
   const addToCart = (p: Product) => {
