@@ -153,16 +153,16 @@ function Dashboard() {
 
           <div className="mt-5 rounded-md bg-muted/60 p-4">
 
-            <div className="text-xs text-muted-foreground">Profit in Aug 2026</div>
-            <div className="text-3xl font-display font-bold mt-1">{formatNPR(53180)}</div>
+            <div className="text-xs text-muted-foreground">Total sales</div>
+            <div className="text-3xl font-display font-bold mt-1">{formatNPR(totals.all)}</div>
             <div className="mt-3 grid grid-cols-2 gap-3">
               <div>
-                <div className="text-xs text-muted-foreground">Expenses</div>
-                <div className="text-sm font-semibold mt-0.5">{formatNPR(14400)}</div>
+                <div className="text-xs text-muted-foreground">On Khata</div>
+                <div className="text-sm font-semibold mt-0.5">{formatNPR(totals.khata)}</div>
               </div>
               <div>
                 <div className="text-xs text-muted-foreground">Income</div>
-                <div className="text-sm font-semibold mt-0.5">{formatNPR(67500)}</div>
+                <div className="text-sm font-semibold mt-0.5">{formatNPR(totals.cash + totals.qr)}</div>
               </div>
             </div>
 
@@ -187,7 +187,7 @@ function Dashboard() {
           {/* Monthly budget */}
           <div className="rounded-lg bg-card border border-border shadow-soft p-5 clip-slant">
             <div className="flex items-center justify-between">
-              <h3 className="font-display font-semibold text-lg">Monthly Budget</h3>
+              <h3 className="font-display font-semibold text-lg">Khata vs Sales</h3>
               <div className="flex gap-1">
                 <button className="w-7 h-7 rounded-sm hover:bg-muted flex items-center justify-center"><MoreHorizontal className="w-4 h-4" /></button>
                 <button className="w-7 h-7 rounded-sm hover:bg-muted flex items-center justify-center text-muted-foreground">↗</button>
@@ -196,22 +196,22 @@ function Dashboard() {
             <div className="mt-4 flex items-baseline justify-between">
               <div>
                 <div className="text-xs text-muted-foreground">Spent</div>
-                <div className="text-lg font-display font-bold mt-0.5">{formatNPR(24000)} <span className="text-muted-foreground text-sm font-normal">/ {formatNPR(40000)}</span></div>
+                <div className="text-lg font-display font-bold mt-0.5">{formatNPR(totals.khata)} <span className="text-muted-foreground text-sm font-normal">/ {formatNPR(totals.all)}</span></div>
               </div>
               <div className="text-right">
                 <div className="text-xs text-muted-foreground">Available</div>
-                <div className="text-lg font-display font-bold mt-0.5">{formatNPR(16000)}</div>
+                <div className="text-lg font-display font-bold mt-0.5">{formatNPR(totals.all - totals.khata)}</div>
               </div>
             </div>
             <div className="mt-3 h-2 rounded-none bg-muted overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-coral via-orange-400 to-purple-400" style={{ width: "60%" }} />
+              <div className="h-full bg-gradient-to-r from-coral via-orange-400 to-purple-400" style={{ width: `${totals.all ? Math.min(100, (totals.khata / totals.all) * 100) : 0}%` }} />
             </div>
           </div>
 
           {/* Expenses breakdown w/ donut */}
           <div className="rounded-lg bg-card border border-border shadow-soft p-5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-display font-semibold text-lg">Expenses</h3>
+              <h3 className="font-display font-semibold text-lg">Stock value</h3>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 Income <span className="text-coral font-semibold">↑</span>
               </div>
@@ -233,7 +233,7 @@ function Dashboard() {
               <div className="flex-1 space-y-2">
                 <div>
                   <div className="text-xs text-muted-foreground">Total</div>
-                  <div className="text-xl font-display font-bold">{formatNPR(14400)}</div>
+                  <div className="text-xl font-display font-bold">{formatNPR(stockValue)}</div>
                 </div>
                 {expenseSlice.map((s)=>(
                   <div key={s.name} className="flex items-center gap-2 text-xs">
@@ -254,7 +254,7 @@ function Dashboard() {
               <span className="text-sm font-medium opacity-90">Cash on hand</span>
               <Wifi className="w-4 h-4 opacity-90" />
             </div>
-            <div className="mt-6 text-3xl font-display font-bold tracking-tight">{formatNPR(35400)}</div>
+            <div className="mt-6 text-3xl font-display font-bold tracking-tight">{formatNPR(totals.cash)}</div>
             <div className="mt-auto absolute bottom-4 left-5 right-5 flex items-center justify-between text-xs opacity-90">
               <span>•••• 5688</span>
               <span className="font-semibold">MOHIT KC</span>
@@ -311,7 +311,7 @@ function Dashboard() {
       {/* Secondary stat row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: "Today's Sales", value: formatNPR(18420), sub: "+12% vs yesterday", icon: TrendingUp, tone: "coral" },
+          { label: "Today's Sales", value: formatNPR(todaySales), sub: `${recentSales.length} sales`, icon: TrendingUp, tone: "coral" },
           { label: "Items Sold", value: "127", sub: "+8 since morning", icon: Package },
           { label: "Outstanding Khata", value: formatNPR(outstanding), sub: `${customers.filter(c=>c.balance>0).length} customers`, icon: BookOpen },
           { label: "Low-Stock Alerts", value: String(lowStock.length), sub: "Restock today", icon: AlertTriangle, tone: "warn" },
