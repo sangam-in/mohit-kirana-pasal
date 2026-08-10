@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { ArrowLeft, MessageCircle, Plus } from "lucide-react";
 import { customers, formatNPR, khataLedger } from "@/lib/mock/data";
 
-export const Route = createFileRoute("/khata/$customerId")({
+export const Route = createFileRoute("/_authenticated/khata/$customerId")({
   head: ({ params }) => {
     const c = customers.find((c) => c.id === params.customerId);
     return {

@@ -4,7 +4,7 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell, PieCha
 import { cashflowByMonth, customers, formatNPR, products, recentSales } from "@/lib/mock/data";
 import { useState } from "react";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
       { title: "Dashboard — Mohit Kirana Pasal" },

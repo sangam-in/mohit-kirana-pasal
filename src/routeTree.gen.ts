@@ -9,91 +9,93 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TransactionsRouteImport } from './routes/transactions'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as ReportsRouteImport } from './routes/reports'
-import { Route as PosRouteImport } from './routes/pos'
-import { Route as KhataRouteImport } from './routes/khata'
-import { Route as InventoryRouteImport } from './routes/inventory'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as KhataCustomerIdRouteImport } from './routes/khata.$customerId'
+import { Route as AuthenticatedTransactionsRouteImport } from './routes/_authenticated/transactions'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
+import { Route as AuthenticatedPosRouteImport } from './routes/_authenticated/pos'
+import { Route as AuthenticatedKhataRouteImport } from './routes/_authenticated/khata'
+import { Route as AuthenticatedInventoryRouteImport } from './routes/_authenticated/inventory'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedKhataCustomerIdRouteImport } from './routes/_authenticated/khata.$customerId'
 
-const TransactionsRoute = TransactionsRouteImport.update({
-  id: '/transactions',
-  path: '/transactions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
+const AuthenticatedTransactionsRoute =
+  AuthenticatedTransactionsRouteImport.update({
+    id: '/_authenticated/transactions',
+    path: '/transactions',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/_authenticated/settings',
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ReportsRoute = ReportsRouteImport.update({
-  id: '/reports',
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/_authenticated/reports',
   path: '/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PosRoute = PosRouteImport.update({
-  id: '/pos',
+const AuthenticatedPosRoute = AuthenticatedPosRouteImport.update({
+  id: '/_authenticated/pos',
   path: '/pos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const KhataRoute = KhataRouteImport.update({
-  id: '/khata',
+const AuthenticatedKhataRoute = AuthenticatedKhataRouteImport.update({
+  id: '/_authenticated/khata',
   path: '/khata',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InventoryRoute = InventoryRouteImport.update({
-  id: '/inventory',
+const AuthenticatedInventoryRoute = AuthenticatedInventoryRouteImport.update({
+  id: '/_authenticated/inventory',
   path: '/inventory',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/_authenticated/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const KhataCustomerIdRoute = KhataCustomerIdRouteImport.update({
-  id: '/$customerId',
-  path: '/$customerId',
-  getParentRoute: () => KhataRoute,
-} as any)
+const AuthenticatedKhataCustomerIdRoute =
+  AuthenticatedKhataCustomerIdRouteImport.update({
+    id: '/$customerId',
+    path: '/$customerId',
+    getParentRoute: () => AuthenticatedKhataRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/inventory': typeof InventoryRoute
-  '/khata': typeof KhataRouteWithChildren
-  '/pos': typeof PosRoute
-  '/reports': typeof ReportsRoute
-  '/settings': typeof SettingsRoute
-  '/transactions': typeof TransactionsRoute
-  '/khata/$customerId': typeof KhataCustomerIdRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/inventory': typeof AuthenticatedInventoryRoute
+  '/khata': typeof AuthenticatedKhataRouteWithChildren
+  '/pos': typeof AuthenticatedPosRoute
+  '/reports': typeof AuthenticatedReportsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/transactions': typeof AuthenticatedTransactionsRoute
+  '/khata/$customerId': typeof AuthenticatedKhataCustomerIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/inventory': typeof InventoryRoute
-  '/khata': typeof KhataRouteWithChildren
-  '/pos': typeof PosRoute
-  '/reports': typeof ReportsRoute
-  '/settings': typeof SettingsRoute
-  '/transactions': typeof TransactionsRoute
-  '/khata/$customerId': typeof KhataCustomerIdRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/inventory': typeof AuthenticatedInventoryRoute
+  '/khata': typeof AuthenticatedKhataRouteWithChildren
+  '/pos': typeof AuthenticatedPosRoute
+  '/reports': typeof AuthenticatedReportsRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/transactions': typeof AuthenticatedTransactionsRoute
+  '/khata/$customerId': typeof AuthenticatedKhataCustomerIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/inventory': typeof InventoryRoute
-  '/khata': typeof KhataRouteWithChildren
-  '/pos': typeof PosRoute
-  '/reports': typeof ReportsRoute
-  '/settings': typeof SettingsRoute
-  '/transactions': typeof TransactionsRoute
-  '/khata/$customerId': typeof KhataCustomerIdRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/inventory': typeof AuthenticatedInventoryRoute
+  '/_authenticated/khata': typeof AuthenticatedKhataRouteWithChildren
+  '/_authenticated/pos': typeof AuthenticatedPosRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
+  '/_authenticated/khata/$customerId': typeof AuthenticatedKhataCustomerIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | '/dashboard'
     | '/inventory'
     | '/khata'
     | '/pos'
@@ -103,7 +105,7 @@ export interface FileRouteTypes {
     | '/khata/$customerId'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/dashboard'
     | '/inventory'
     | '/khata'
     | '/pos'
@@ -113,105 +115,106 @@ export interface FileRouteTypes {
     | '/khata/$customerId'
   id:
     | '__root__'
-    | '/'
-    | '/inventory'
-    | '/khata'
-    | '/pos'
-    | '/reports'
-    | '/settings'
-    | '/transactions'
-    | '/khata/$customerId'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/inventory'
+    | '/_authenticated/khata'
+    | '/_authenticated/pos'
+    | '/_authenticated/reports'
+    | '/_authenticated/settings'
+    | '/_authenticated/transactions'
+    | '/_authenticated/khata/$customerId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  InventoryRoute: typeof InventoryRoute
-  KhataRoute: typeof KhataRouteWithChildren
-  PosRoute: typeof PosRoute
-  ReportsRoute: typeof ReportsRoute
-  SettingsRoute: typeof SettingsRoute
-  TransactionsRoute: typeof TransactionsRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedInventoryRoute: typeof AuthenticatedInventoryRoute
+  AuthenticatedKhataRoute: typeof AuthenticatedKhataRouteWithChildren
+  AuthenticatedPosRoute: typeof AuthenticatedPosRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedTransactionsRoute: typeof AuthenticatedTransactionsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/transactions': {
-      id: '/transactions'
+    '/_authenticated/transactions': {
+      id: '/_authenticated/transactions'
       path: '/transactions'
       fullPath: '/transactions'
-      preLoaderRoute: typeof TransactionsRouteImport
+      preLoaderRoute: typeof AuthenticatedTransactionsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/settings': {
-      id: '/settings'
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/reports': {
-      id: '/reports'
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
       path: '/reports'
       fullPath: '/reports'
-      preLoaderRoute: typeof ReportsRouteImport
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pos': {
-      id: '/pos'
+    '/_authenticated/pos': {
+      id: '/_authenticated/pos'
       path: '/pos'
       fullPath: '/pos'
-      preLoaderRoute: typeof PosRouteImport
+      preLoaderRoute: typeof AuthenticatedPosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/khata': {
-      id: '/khata'
+    '/_authenticated/khata': {
+      id: '/_authenticated/khata'
       path: '/khata'
       fullPath: '/khata'
-      preLoaderRoute: typeof KhataRouteImport
+      preLoaderRoute: typeof AuthenticatedKhataRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/inventory': {
-      id: '/inventory'
+    '/_authenticated/inventory': {
+      id: '/_authenticated/inventory'
       path: '/inventory'
       fullPath: '/inventory'
-      preLoaderRoute: typeof InventoryRouteImport
+      preLoaderRoute: typeof AuthenticatedInventoryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/khata/$customerId': {
-      id: '/khata/$customerId'
+    '/_authenticated/khata/$customerId': {
+      id: '/_authenticated/khata/$customerId'
       path: '/$customerId'
       fullPath: '/khata/$customerId'
-      preLoaderRoute: typeof KhataCustomerIdRouteImport
-      parentRoute: typeof KhataRoute
+      preLoaderRoute: typeof AuthenticatedKhataCustomerIdRouteImport
+      parentRoute: typeof AuthenticatedKhataRoute
     }
   }
 }
 
-interface KhataRouteChildren {
-  KhataCustomerIdRoute: typeof KhataCustomerIdRoute
+interface AuthenticatedKhataRouteChildren {
+  AuthenticatedKhataCustomerIdRoute: typeof AuthenticatedKhataCustomerIdRoute
 }
 
-const KhataRouteChildren: KhataRouteChildren = {
-  KhataCustomerIdRoute: KhataCustomerIdRoute,
+const AuthenticatedKhataRouteChildren: AuthenticatedKhataRouteChildren = {
+  AuthenticatedKhataCustomerIdRoute: AuthenticatedKhataCustomerIdRoute,
 }
 
-const KhataRouteWithChildren = KhataRoute._addFileChildren(KhataRouteChildren)
+const AuthenticatedKhataRouteWithChildren =
+  AuthenticatedKhataRoute._addFileChildren(AuthenticatedKhataRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  InventoryRoute: InventoryRoute,
-  KhataRoute: KhataRouteWithChildren,
-  PosRoute: PosRoute,
-  ReportsRoute: ReportsRoute,
-  SettingsRoute: SettingsRoute,
-  TransactionsRoute: TransactionsRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedInventoryRoute: AuthenticatedInventoryRoute,
+  AuthenticatedKhataRoute: AuthenticatedKhataRouteWithChildren,
+  AuthenticatedPosRoute: AuthenticatedPosRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedTransactionsRoute: AuthenticatedTransactionsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

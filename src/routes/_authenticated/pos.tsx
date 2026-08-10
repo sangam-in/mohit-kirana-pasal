@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Search, Trash2, Printer, Wifi, Wallet, BookOpen, QrCode, Volume2, Minus, Plus, ScanLine } from "lucide-react";
 import { customers, formatNPR, products, type PaymentMethod, type Product } from "@/lib/mock/data";
 
-export const Route = createFileRoute("/pos")({
+export const Route = createFileRoute("/_authenticated/pos")({
   head: () => ({
     meta: [
       { title: "Quick Sale — Mohit Kirana Pasal" },

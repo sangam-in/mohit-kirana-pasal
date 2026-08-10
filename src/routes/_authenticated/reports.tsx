@@ -3,7 +3,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Line, LineChart, Tooltip, XAx
 import { cashflowByMonth, formatNPR, paymentMix, topSellers } from "@/lib/mock/data";
 import { Download } from "lucide-react";
 
-export const Route = createFileRoute("/reports")({
+export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
     meta: [
       { title: "Reports — Mohit Kirana Pasal" },

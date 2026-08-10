@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Search, MessageCircle, ChevronRight } from "lucide-react";
 import { customers, formatNPR } from "@/lib/mock/data";
 
-export const Route = createFileRoute("/khata")({
+export const Route = createFileRoute("/_authenticated/khata")({
   head: () => ({
     meta: [
       { title: "Khata (Credit) — Mohit Kirana Pasal" },

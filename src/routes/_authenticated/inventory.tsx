@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Search, Plus, ClipboardCheck, AlertTriangle } from "lucide-react";
 import { formatNPR, products } from "@/lib/mock/data";
 
-export const Route = createFileRoute("/inventory")({
+export const Route = createFileRoute("/_authenticated/inventory")({
   head: () => ({
     meta: [
       { title: "Inventory (Saman) — Mohit Kirana Pasal" },
