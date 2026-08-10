@@ -3,7 +3,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Store, Printer, Users, Volume2, Languages } from "lucide-react";
 
-export const Route = createFileRoute("/settings")({
+export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
       { title: "Settings — Mohit Kirana Pasal" },

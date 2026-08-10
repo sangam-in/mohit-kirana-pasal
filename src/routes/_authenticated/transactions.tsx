@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { customers, formatNPR, recentSales, type PaymentMethod } from "@/lib/mock/data";
+import { formatNPR, useCustomers, useSales, type PaymentMethod } from "@/lib/store-data";
 
-export const Route = createFileRoute("/transactions")({
+export const Route = createFileRoute("/_authenticated/transactions")({
   head: () => ({
     meta: [
       { title: "Transactions — Mohit Kirana Pasal" },
@@ -16,7 +16,9 @@ export const Route = createFileRoute("/transactions")({
 
 function Transactions() {
   const [filter, setFilter] = useState<"all" | PaymentMethod>("all");
-  const list = recentSales.filter((s) => filter === "all" || s.method === filter);
+  const { data: sales = [], isLoading } = useSales();
+  const { data: customers = [] } = useCustomers();
+  const list = sales.filter((s) => filter === "all" || s.method === filter);
 
   return (
     <div className="p-6 lg:p-8 max-w-[1500px] mx-auto space-y-6">
@@ -63,6 +65,9 @@ function Transactions() {
                 </tr>
               );
             })}
+            {!isLoading && list.length === 0 && (
+              <tr><td colSpan={5} className="text-center py-10 text-muted-foreground text-sm">No sales recorded yet</td></tr>
+            )}
           </tbody>
         </table>
       </div>

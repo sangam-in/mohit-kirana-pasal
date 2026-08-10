@@ -1,31 +1,50 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowLeft, MessageCircle, Plus } from "lucide-react";
-import { customers, formatNPR, khataLedger } from "@/lib/mock/data";
+import { formatNPR, useCustomers, useKhataEntries, useRecordPayment } from "@/lib/store-data";
 
-export const Route = createFileRoute("/khata/$customerId")({
-  head: ({ params }) => {
-    const c = customers.find((c) => c.id === params.customerId);
-    return {
-      meta: [
-        { title: `${c?.name ?? "Khata"} — Ledger` },
-        { name: "description", content: `Itemized Khata ledger and payment history for ${c?.name ?? "customer"}.` },
-        { property: "og:title", content: `${c?.name ?? "Customer"} Khata` },
-        { property: "og:description", content: "Kirana Khata ledger with balance history." },
-      ],
-    };
-  },
-  loader: ({ params }) => {
-    const c = customers.find((c) => c.id === params.customerId);
-    if (!c) throw notFound();
-    return { customer: c };
-  },
+export const Route = createFileRoute("/_authenticated/khata/$customerId")({
+  head: () => ({
+    meta: [
+      { title: "Customer Khata — Ledger" },
+      { name: "description", content: "Itemized Khata ledger and payment history for this credit customer." },
+      { property: "og:title", content: "Customer Khata" },
+      { property: "og:description", content: "Kirana Khata ledger with balance history." },
+    ],
+  }),
   component: KhataDetail,
 });
 
 function KhataDetail() {
-  const { customer } = Route.useLoaderData();
-  const entries = khataLedger.filter((k) => k.customerId === customer.id);
+  const { customerId } = Route.useParams();
+  const { data: customers = [] } = useCustomers();
+  const { data: entries = [] } = useKhataEntries(customerId);
+  const recordPayment = useRecordPayment();
+  const [amount, setAmount] = useState("");
+
+  const customer = customers.find((c) => c.id === customerId);
+
+  if (!customer) {
+    return (
+      <div className="p-8 text-sm text-muted-foreground">
+        Loading customer…
+      </div>
+    );
+  }
+
+  const pay = async () => {
+    const value = Number(amount);
+    if (!value || value <= 0) return toast.error("Enter a payment amount");
+    try {
+      await recordPayment.mutateAsync({ customerId, amount: value });
+      setAmount("");
+      toast.success("Payment recorded", { description: formatNPR(value) });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not record payment");
+    }
+  };
+
 
   return (
     <div className="p-6 lg:p-8 max-w-[1100px] mx-auto space-y-6">
@@ -52,7 +71,14 @@ function KhataDetail() {
         <button onClick={() => toast.success("Reminder sent via WhatsApp", { description: `Balance: ${formatNPR(customer.balance)}` })} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-card border border-border hover:bg-muted text-sm">
           <MessageCircle className="w-4 h-4 text-primary" /> Send WhatsApp reminder
         </button>
-        <button onClick={() => toast.success("Payment recorded", { description: "Khata cleared" })} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-medium">
+        <input
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          inputMode="numeric"
+          placeholder="Amount"
+          className="w-32 px-3 py-2.5 rounded-xl bg-background border border-border text-sm outline-none focus:border-primary"
+        />
+        <button onClick={pay} disabled={recordPayment.isPending} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-medium disabled:opacity-60">
           <Plus className="w-4 h-4" /> Record Payment
         </button>
       </div>
