@@ -71,7 +71,14 @@ function KhataDetail() {
         <button onClick={() => toast.success("Reminder sent via WhatsApp", { description: `Balance: ${formatNPR(customer.balance)}` })} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-card border border-border hover:bg-muted text-sm">
           <MessageCircle className="w-4 h-4 text-primary" /> Send WhatsApp reminder
         </button>
-        <button onClick={() => toast.success("Payment recorded", { description: "Khata cleared" })} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-medium">
+        <input
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          inputMode="numeric"
+          placeholder="Amount"
+          className="w-32 px-3 py-2.5 rounded-xl bg-background border border-border text-sm outline-none focus:border-primary"
+        />
+        <button onClick={pay} disabled={recordPayment.isPending} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-medium disabled:opacity-60">
           <Plus className="w-4 h-4" /> Record Payment
         </button>
       </div>
