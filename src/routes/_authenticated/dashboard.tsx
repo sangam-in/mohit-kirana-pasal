@@ -151,7 +151,7 @@ function Dashboard() {
             </div>
 
             <ResponsiveContainer width="100%" height={140} className="mt-3">
-              <BarChart data={cashflowByMonth.slice(0, 6)}>
+              <BarChart data={cashflowByMonth}>
                 <XAxis dataKey="m" stroke="oklch(0.55 0.02 275)" fontSize={10} tickLine={false} axisLine={false} />
                 <YAxis hide />
                 <Tooltip cursor={{ fill: "oklch(0.94 0.01 285 / 0.6)" }} contentStyle={{ borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)", fontSize: 12 }} />
