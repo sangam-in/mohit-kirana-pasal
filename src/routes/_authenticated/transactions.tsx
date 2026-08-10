@@ -65,6 +65,9 @@ function Transactions() {
                 </tr>
               );
             })}
+            {!isLoading && list.length === 0 && (
+              <tr><td colSpan={5} className="text-center py-10 text-muted-foreground text-sm">No sales recorded yet</td></tr>
+            )}
           </tbody>
         </table>
       </div>
