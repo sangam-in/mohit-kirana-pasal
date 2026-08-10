@@ -92,7 +92,7 @@ function Inventory() {
             <input value={q} onChange={(e)=>setQ(e.target.value)} placeholder="Search products or barcode…" className="w-full pl-9 pr-4 py-2 rounded-lg bg-background border border-border text-sm outline-none focus:border-primary" />
           </div>
           {["All", "Snacks", "Drinks", "Grocery", "Dairy", "Household", "Tobacco"].map((c) => (
-            <button key={c} className="px-3 py-1.5 rounded-full text-xs bg-muted hover:bg-accent text-foreground">{c}</button>
+            <button key={c} onClick={() => setCat(c)} className={`px-3 py-1.5 rounded-full text-xs ${cat === c ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-accent text-foreground"}`}>{c}</button>
           ))}
         </div>
 
