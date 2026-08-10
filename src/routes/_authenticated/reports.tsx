@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Cell, Pie, PieChart, ResponsiveContainer, Line, LineChart, Tooltip, XAxis, YAxis, Legend } from "recharts";
-import { cashflowByMonth, formatNPR, paymentMix, topSellers } from "@/lib/mock/data";
+import { formatNPR, useSales } from "@/lib/store-data";
 import { Download } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/reports")({
@@ -16,7 +16,35 @@ export const Route = createFileRoute("/_authenticated/reports")({
 });
 
 function Reports() {
-  const trend = cashflowByMonth.map((m) => ({ m: m.m, total: m.cash + m.qr + m.khata }));
+  const { data: sales = [] } = useSales();
+
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const byMonth = new Map<number, number>();
+  const mix = { cash: 0, qr: 0, khata: 0 };
+  const sellers = new Map<string, { units: number; revenue: number }>();
+
+  for (const s of sales) {
+    const d = new Date(s.date.split(",")[0].split("/").reverse().join("-"));
+    const m = isNaN(d.getTime()) ? new Date().getMonth() : d.getMonth();
+    byMonth.set(m, (byMonth.get(m) ?? 0) + s.total);
+    mix[s.method] += s.total;
+    for (const i of s.items) {
+      const prev = sellers.get(i.name) ?? { units: 0, revenue: 0 };
+      sellers.set(i.name, { units: prev.units + i.qty, revenue: prev.revenue + i.qty * i.price });
+    }
+  }
+
+  const trend = monthNames.map((m, i) => ({ m, total: byMonth.get(i) ?? 0 }));
+  const paymentMix = [
+    { name: "Cash", value: Math.round(mix.cash), color: "oklch(0.68 0.15 155)" },
+    { name: "QR / Digital", value: Math.round(mix.qr), color: "oklch(0.5 0.22 285)" },
+    { name: "Khata", value: Math.round(mix.khata), color: "oklch(0.82 0.15 75)" },
+  ].filter((p) => p.value > 0);
+  const topSellers = [...sellers.entries()]
+    .map(([name, v]) => ({ name, ...v }))
+    .sort((a, b) => b.units - a.units)
+    .slice(0, 5);
+
 
   return (
     <div className="p-6 lg:p-8 max-w-[1500px] mx-auto space-y-6">
