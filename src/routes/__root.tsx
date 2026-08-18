@@ -59,9 +59,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Mohit Kirana Pasal — Billing, Inventory & Khata" },
+      { title: "Hamro Kirana Management — Billing, Inventory & Khata" },
       { name: "description", content: "Offline-first billing, inventory, and Khata (credit) management for neighborhood Kirana stores in Nepal." },
-      { property: "og:title", content: "Mohit Kirana Pasal — Billing & Khata" },
+      { property: "og:title", content: "Hamro Kirana Management — Billing & Khata" },
       { property: "og:description", content: "Quick Sale POS with hybrid Cash / QR / Khata payments, live inventory and automated credit notifications." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -6,9 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mohit Kirana Pasal — Billing, Inventory & Khata" },
+      { title: "Hamro Kirana Management — Billing, Inventory & Khata" },
       { name: "description", content: "Run your Kirana store: quick-sale billing, live inventory and digital Khata credit records in one place." },
-      { property: "og:title", content: "Mohit Kirana Pasal — Billing & Khata" },
+      { property: "og:title", content: "Hamro Kirana Management — Billing & Khata" },
       { property: "og:description", content: "Quick Sale POS with Cash / QR / Khata payments, live inventory and credit reminders." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -30,7 +30,7 @@ function Landing() {
           <Store className="w-6 h-6 -rotate-45" />
         </div>
         <div>
-          <h1 className="text-4xl font-display font-bold tracking-tight">Mohit Kirana Pasal</h1>
+          <h1 className="text-4xl font-display font-bold tracking-tight">Hamro Kirana Management</h1>
           <p className="mt-3 text-muted-foreground max-w-xl">
             Bikri, saman ra khata — one place. Fast billing with Cash / QR / Khata, live stock counts,
             and credit ledgers with reminders.

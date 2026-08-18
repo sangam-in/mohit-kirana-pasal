@@ -1,5 +1,4 @@
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import {
   Home,
   ShoppingCart,
@@ -8,17 +7,16 @@ import {
   Receipt,
   LineChart,
   Settings,
+  ChevronDown,
   Store,
   ArrowRight,
-  LogOut,
 } from "lucide-react";
-import basket from "@/assets/basket.png";
-import { supabase } from "@/integrations/supabase/client";
+import basket from "@/assets/basket.jpg";
 
 const nav = [
-  { label: "Dashboard", icon: Home, to: "/dashboard" },
+  { label: "Dashboard", icon: Home, to: "/" },
   { label: "Bikri / POS", icon: ShoppingCart, to: "/pos" },
-  { label: "Saman", icon: Package, to: "/inventory" },
+  { label: "Saman", icon: Package, to: "/saman" },
   { label: "Khata", icon: NotebookText, to: "/khata" },
   { label: "Transactions", icon: Receipt, to: "/transactions" },
   { label: "Reports", icon: LineChart, to: "/reports" },
@@ -30,21 +28,10 @@ const base =
 const activeCls =
   "flex items-center gap-3 rounded-2xl bg-primary px-4 py-3 text-left text-sm font-semibold text-primary-foreground shadow-soft hover:bg-primary";
 
-export function AppSidebar() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const signOut = async () => {
-    await queryClient.cancelQueries();
-    queryClient.clear();
-    await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
-  };
-
+export function Sidebar() {
   return (
-    <aside className="hidden w-72 shrink-0 flex-col gap-8 bg-sidebar px-5 py-7 lg:flex h-screen sticky top-0 border-r border-sidebar-border">
-      <Link to="/dashboard" className="flex items-center gap-3">
+    <aside className="hidden w-72 shrink-0 flex-col gap-8 bg-sidebar px-5 py-7 lg:flex">
+      <Link to="/" className="flex items-center gap-3">
         <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/15 text-primary">
           <Store className="h-6 w-6" />
         </span>
@@ -61,7 +48,7 @@ export function AppSidebar() {
           <Link
             key={label}
             to={to}
-            activeOptions={{ exact: to === "/dashboard" }}
+            activeOptions={{ exact: to === "/" }}
             className={base}
             activeProps={{ className: activeCls }}
           >
@@ -79,7 +66,7 @@ export function AppSidebar() {
             loading="lazy"
             width={900}
             height={640}
-            className="mx-auto h-24 w-auto object-contain"
+            className="mx-auto h-24 w-auto object-contain mix-blend-multiply"
           />
           <p className="mt-2 font-display text-sm font-bold text-accent-foreground">
             Keep your stock updated
@@ -88,14 +75,14 @@ export function AppSidebar() {
             Add new products and never miss a sale.
           </p>
           <Link
-            to="/inventory"
-            className="mt-3 flex w-full items-center justify-between rounded-xl bg-card px-3 py-2 text-sm font-semibold text-foreground shadow-soft hover:bg-muted"
+            to="/saman"
+            className="mt-3 flex w-full items-center justify-between rounded-xl bg-card px-3 py-2 text-sm font-semibold text-foreground shadow-soft"
           >
             Add Product <ArrowRight className="h-4 w-4 text-primary" />
           </Link>
         </div>
 
-        <div className="flex items-center gap-3 rounded-3xl bg-card p-3 shadow-soft relative group">
+        <div className="flex items-center gap-3 rounded-3xl bg-card p-3 shadow-soft">
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary/15 font-display text-sm font-bold text-primary">
             DS
           </span>
@@ -103,9 +90,7 @@ export function AppSidebar() {
             <p className="truncate text-sm font-semibold">Dai Store</p>
             <p className="truncate text-xs text-muted-foreground">Owner</p>
           </div>
-          <button onClick={signOut} className="p-2 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition" title="Sign Out">
-            <LogOut className="h-4 w-4 shrink-0" />
-          </button>
+          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
         </div>
       </div>
     </aside>

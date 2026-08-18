@@ -6,7 +6,7 @@ import { Store, Printer, Users, Volume2, Languages } from "lucide-react";
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — Mohit Kirana Pasal" },
+      { title: "Settings — Hamro Kirana Management" },
       { name: "description", content: "Store info, thermal printer, cashier roles, audio cues and language." },
       { property: "og:title", content: "Kirana Settings" },
       { property: "og:description", content: "Configure your Kirana billing system." },
@@ -38,6 +38,22 @@ function Toggle({ initial = false, onChange }: { initial?: boolean; onChange?: (
 }
 
 function Settings() {
+  const [voiceGender, setVoiceGender] = useState<"female" | "male">(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("nepali_voice_gender");
+      if (saved === "male" || saved === "female") {
+        return saved;
+      }
+    }
+    return "female";
+  });
+
+  const handleVoiceChange = (gender: "female" | "male") => {
+    setVoiceGender(gender);
+    localStorage.setItem("nepali_voice_gender", gender);
+    toast.success(`Voice set to ${gender}`);
+  };
+
   return (
     <div className="p-6 lg:p-8 max-w-3xl mx-auto space-y-6">
       <div>
@@ -48,10 +64,10 @@ function Settings() {
       <div className="rounded-2xl bg-card border border-border shadow-soft overflow-hidden">
         <Row icon={Store} title="Store info" desc="Shown on receipts and reports">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <input defaultValue="Mohit Kirana Pasal" className="px-3 py-2 rounded-lg bg-background border border-border text-sm outline-none focus:border-primary" />
-            <input defaultValue="Sandhikharka, Arghakhanchi" className="px-3 py-2 rounded-lg bg-background border border-border text-sm outline-none focus:border-primary" />
-            <input defaultValue="+977 98-1122-3344" className="px-3 py-2 rounded-lg bg-background border border-border text-sm outline-none focus:border-primary" />
-            <input defaultValue="PAN 601-234-567" className="px-3 py-2 rounded-lg bg-background border border-border text-sm outline-none focus:border-primary" />
+            <input defaultValue="Hamro Kirana Management" className="px-3 py-2 rounded-lg bg-background border border-border text-sm outline-none focus:border-primary" />
+            <input defaultValue="Kathmandu, Nepal" className="px-3 py-2 rounded-lg bg-background border border-border text-sm outline-none focus:border-primary" />
+            <input defaultValue="+977 98-0000-0000" className="px-3 py-2 rounded-lg bg-background border border-border text-sm outline-none focus:border-primary" />
+            <input defaultValue="PAN 600-000-000" className="px-3 py-2 rounded-lg bg-background border border-border text-sm outline-none focus:border-primary" />
           </div>
         </Row>
 
@@ -62,8 +78,27 @@ function Settings() {
           </div>
         </Row>
 
-        <Row icon={Volume2} title="Audio confirmation" desc={`"Payment bhayeko chha" cue on successful payment`}>
-          <Toggle initial onChange={(v) => toast(v ? "Audio ON" : "Audio OFF")} />
+        <Row icon={Volume2} title="Audio confirmation" desc={`"Payment bhayeko chha" voice on successful transaction`}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Voice:</span>
+              {(["female", "male"] as const).map((gender) => {
+                const isSelected = voiceGender === gender;
+                return (
+                  <button
+                    key={gender}
+                    onClick={() => handleVoiceChange(gender)}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold capitalize transition ${
+                      isSelected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {gender === "female" ? "👩 Female" : "👨 Male"}
+                  </button>
+                );
+              })}
+            </div>
+            <Toggle initial onChange={(v) => toast(v ? "Audio ON" : "Audio OFF")} />
+          </div>
         </Row>
 
         <Row icon={Languages} title="Language" desc="Interface language">
@@ -77,7 +112,7 @@ function Settings() {
         <Row icon={Users} title="Roles & access" desc="Owner sees profit; cashier sees only billing">
           <div className="space-y-2 text-sm">
             <div className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
-              <div><span className="font-medium">Mohit K.C.</span> <span className="text-xs text-muted-foreground ml-1">Owner</span></div>
+              <div><span className="font-medium">Shop Owner</span> <span className="text-xs text-muted-foreground ml-1">Owner</span></div>
               <span className="text-xs px-2 py-0.5 rounded-full bg-primary/15 text-primary">Full access</span>
             </div>
             <div className="flex items-center justify-between p-2 rounded-lg bg-muted/50">

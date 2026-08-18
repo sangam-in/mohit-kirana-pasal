@@ -1,0 +1,13 @@
+-- Seed standard presentation data (Products, Customers, Sales, and Khata)
+-- Note: Replace 'YOUR_USER_ID' with the authenticated user's UUID or insert rows linked to a dummy UUID.
+-- Because RLS is active, users see data matching their auth.uid().
+-- You can run these commands in the Supabase Dashboard SQL Editor once signed up/logged in.
+
+-- Example inserts:
+-- INSERT INTO public.products (user_id, name, name_np, category, barcode, price, pack_stock, low_stock_at, emoji) VALUES
+-- ('YOUR_USER_ID', 'Wai Wai Noodles', 'वाइ वाइ', 'Snacks', '8901491100013', 25, 42, 20, '🍜'),
+-- ('YOUR_USER_ID', 'Coca-Cola 500ml', NULL, 'Drinks', '5449000000996', 80, 18, 10, '🥤'),
+-- ('YOUR_USER_ID', 'Basmati Rice 5kg', 'बासमती चामल', 'Grocery', '8901012345678', 950, 8, 4, '🍚'),
+-- ('YOUR_USER_ID', 'Surya Cigarette', NULL, 'Tobacco', '8901234500012', 400, 6, 5, '🚬'),
+-- ('YOUR_USER_ID', 'Amul Milk 1L', NULL, 'Dairy', '8901234100104', 90, 3, 6, '🥛'),
+-- ('YOUR_USER_ID', 'Britannia Biscuit', NULL, 'Snacks', '8901063010102', 30, 55, 15, '🍪');

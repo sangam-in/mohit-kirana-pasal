@@ -6,7 +6,7 @@ import { Download } from "lucide-react";
 export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
     meta: [
-      { title: "Reports — Mohit Kirana Pasal" },
+      { title: "Reports — Hamro Kirana Management" },
       { name: "description", content: "Sales trends, payment mix, top sellers and shrinkage from Quick Count." },
       { property: "og:title", content: "Kirana Reports & Insights" },
       { property: "og:description", content: "Owner-level reporting for a neighborhood Kirana store." },

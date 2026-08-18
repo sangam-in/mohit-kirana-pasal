@@ -5,7 +5,7 @@ import { formatNPR, useCustomers, useSales, type PaymentMethod } from "@/lib/sto
 export const Route = createFileRoute("/_authenticated/transactions")({
   head: () => ({
     meta: [
-      { title: "Transactions — Mohit Kirana Pasal" },
+      { title: "Transactions — Hamro Kirana Management" },
       { name: "description", content: "Chronological sales log with per-line item details and correction actions." },
       { property: "og:title", content: "Sales History" },
       { property: "og:description", content: "Audit trail of every sale by Cash, QR or Khata." },
